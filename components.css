@@ -1119,11 +1119,23 @@
 }
 
 /* Стили для элементов с изображениями */
+/* Исправление для element-with-image */
 .element-with-image {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     margin-bottom: 3rem;
+}
+
+/* Убедимся, что features-grid имеет правильные отступы */
+.element-with-image .features-grid {
+    margin-top: 1rem;
+}
+
+/* Дополнительные отступы для карточек в секциях элементов */
+.section.elements-detail .feature-card,
+.section.history-timeline .feature-card {
+    margin-top: 0.5rem;
 }
 
 /* Улучшенные стили для изображений элементов */
@@ -1207,4 +1219,5 @@
 .loading-indicator p {
     color: var(--color-text-light);
     font-size: 1rem;
+
 }
