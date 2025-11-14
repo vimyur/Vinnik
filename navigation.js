@@ -36,41 +36,25 @@ function loadPageContent(page) {
         return Promise.resolve(contentCache[page]);
     }
     
-    return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', `content/${page}.html`, true);
-        
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                // Для file:// protocol статус может быть 0, для http:// - 200
-                if (xhr.status === 200 || xhr.status === 0) {
-                    if (xhr.responseText && xhr.responseText.trim() !== '') {
-                        console.log(`Successfully loaded ${page}.html`);
-                        contentCache[page] = xhr.responseText;
-                        resolve(xhr.responseText);
-                    } else {
-                        reject(new Error('Empty file content'));
-                    }
-                } else {
-                    reject(new Error(`Failed to load ${page}.html - Status: ${xhr.status}`));
-                }
+    return fetch(`content/${page}.html`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to load ${page}.html - Status: ${response.status}`);
             }
-        };
-        
-        xhr.onerror = function() {
-            reject(new Error(`Network error loading ${page}.html`));
-        };
-        
-        // Таймаут на случай если файл не существует
-        setTimeout(() => {
-            if (xhr.readyState !== 4) {
-                xhr.abort();
-                reject(new Error(`Timeout loading ${page}.html`));
+            return response.text();
+        })
+        .then(content => {
+            if (!content || content.trim() === '') {
+                throw new Error('Empty file content');
             }
-        }, 2000);
-        
-        xhr.send();
-    });
+            console.log(`Successfully loaded ${page}.html`);
+            contentCache[page] = content;
+            return content;
+        })
+        .catch(error => {
+            console.error(`Error loading ${page}.html:`, error);
+            throw error;
+        });
 }
 
 function getErrorPage() {
