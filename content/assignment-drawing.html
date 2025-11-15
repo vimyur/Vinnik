@@ -2,12 +2,10 @@
     <section class="section">
         <div class="container">
             <div class="section-header">
-                <h2>Задание: Рисунок CSS</h2>
-                <p>Создание графической композиции "Комната с чайником"</p>
+                <h2>Задание 1: Рисунок CSS</h2>
             </div>
             
-            <!-- Контейнер с рисунком -->
-            <div class="assignment-content">
+            <div class="css-drawing-container">
                 <style>
                     .css-drawing-container {
                         background: #f4f4f4;
@@ -20,23 +18,18 @@
                     
                     .drawing-wrapper {
                         background: #a9bc94;
-                        padding: 2rem;
-                        border-radius: 1rem;
+                        padding: 1rem;
                         display: inline-block;
-                        border: 2px solid var(--color-dark);
                     }
                     
-                    /* Стили рисунка */
                     .picture {
                         width: 200px;
                         height: 200px;
                         background: #a9bc94; 
                         margin: 0 auto;
                         position: relative;
-                        border: 1px solid black;
                     }
 
-                    /* Окно */
                     .window {
                         position: absolute;
                         top: 30px;
@@ -49,7 +42,6 @@
                         box-sizing: border-box;
                     }
                     
-                    /* Солнце */
                     .window .sun {
                         position: absolute;
                         top: 0;
@@ -61,44 +53,6 @@
                         box-shadow: 0 0 0 4px rgb(213, 198, 30);
                     }
 
-                    /* Рамка */
-                    .frame-decor {
-                        position: absolute;
-                        top: 30px;
-                        left: 46px;
-                        width: 107px;
-                        height: 103px;
-                    }
-                    .frame-decor span {
-                        position: absolute;
-                        width: 12px;
-                        height: 12px;
-                        border: 5px solid #ffffff;
-                        border-radius: 50%;
-                        background: transparent;
-                    }
-                    .frame-decor .top { top: -10px; }
-                    .frame-decor .top-1 { left: 0; }
-                    .frame-decor .top-2 { left: 21px; }
-                    .frame-decor .top-3 { left: 42px; }
-                    .frame-decor .top-4 { left: 63px; }
-                    .frame-decor .top-5 { left: 84px; }
-
-                    .frame-decor .left { left: -10px; }
-                    .frame-decor .left-1 { top: 0px; }
-                    .frame-decor .left-2 { top: 20px; }
-                    .frame-decor .left-3 { top: 40px; }
-                    .frame-decor .left-4 { top: 60px; }
-                    .frame-decor .left-5 { top: 82px; }
-
-                    .frame-decor .right { right: -10px; }
-                    .frame-decor .right-1 { top: 0px; }
-                    .frame-decor .right-2 { top: 20px; }
-                    .frame-decor .right-3 { top: 40px; }
-                    .frame-decor .right-4 { top: 60px; }
-                    .frame-decor .right-5 { top: 82px; }
-
-                    /*Чайник*/
                     .teapot {
                         position: absolute;
                         top: 85px;
@@ -195,7 +149,6 @@
                         left: 30px; 
                     }
 
-                    /*Стулья*/
                     .chair {
                         position: absolute;
                         bottom: 20px;
@@ -271,68 +224,45 @@
                     }
                 </style>
                 
-                <div class="css-drawing-container">
-                    <div class="drawing-wrapper">
-                        <div class="picture">
-                            <div class="frame-decor">
-                                <span class="top top-1"></span>
-                                <span class="top top-2"></span>
-                                <span class="top top-3"></span>
-                                <span class="top top-4"></span>
-                                <span class="top top-5"></span>
-                                
-                                <span class="left left-1"></span>
-                                <span class="left left-2"></span>
-                                <span class="left left-3"></span>
-                                <span class="left left-4"></span>
-                                <span class="left left-5"></span>
-                                
-                                <span class="right right-1"></span>
-                                <span class="right right-2"></span>
-                                <span class="right right-3"></span>
-                                <span class="right right-4"></span>
-                                <span class="right right-5"></span>
-                            </div>
+                <div class="drawing-wrapper">
+                    <div class="picture">
+                        <div class="window">
+                            <div class="sun"></div>
+                        </div>
 
-                            <div class="window">
-                                <div class="sun"></div>
-                            </div>
+                        <div class="teapot">
+                            <div class="teapot-lid"></div>  
+                            <div class="teapot-base"></div> 
+                            <div class="teapot-knob"></div> 
+                            <div class="teapot-spout"></div> 
+                            <div class="teapot-handle"></div> 
+                        </div>
 
-                            <div class="teapot">
-                                <div class="teapot-lid"></div>  
-                                <div class="teapot-base"></div> 
-                                <div class="teapot-knob"></div> 
-                                <div class="teapot-spout"></div> 
-                                <div class="teapot-handle"></div> 
-                            </div>
+                        <div class="table"></div>
 
-                            <div class="table"></div>
-
-                            <div class="chair left">
-                                <div class="seat">
-                                    <span class="rivet"></span>
-                                    <span class="rivet"></span>
-                                    <span class="rivet"></span>
-                                </div>
-                                <div class="leg"></div>
+                        <div class="chair left">
+                            <div class="seat">
+                                <span class="rivet"></span>
+                                <span class="rivet"></span>
+                                <span class="rivet"></span>
                             </div>
+                            <div class="leg"></div>
+                        </div>
 
-                            <div class="chair right">
-                                <div class="seat">
-                                    <span class="rivet"></span>
-                                    <span class="rivet"></span>
-                                    <span class="rivet"></span>
-                                    <span class="rivet"></span>
-                                    <span class="rivet"></span>
-                                </div>
-                                <div class="leg"></div>
+                        <div class="chair right">
+                            <div class="seat">
+                                <span class="rivet"></span>
+                                <span class="rivet"></span>
+                                <span class="rivet"></span>
+                                <span class="rivet"></span>
+                                <span class="rivet"></span>
                             </div>
+                            <div class="leg"></div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Кнопка перехода -->
             <div class="hero-actions" style="justify-content: center; margin-top: 2rem;">
                 <button class="btn btn-primary" data-page="assignment-flexbox">
                     Следующее задание →
