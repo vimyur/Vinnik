@@ -36,19 +36,19 @@ function loadPageContent(page) {
     return fetch(`content/${page}.html`)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Ошибка загрузки ${page}.html - Статус: ${response.status}`);
+                throw new Error(`Failed to load ${page}.html - Status: ${response.status}`);
             }
             return response.text();
         })
         .then(content => {
             if (!content || content.trim() === '') {
-                throw new Error('Пустая страница');
+                throw new Error('Empty file content');
             }
             contentCache[page] = content;
             return content;
         })
         .catch(error => {
-            console.error(`Ошибка загрузки ${page}.html:`, error);
+            console.error(`Error loading ${page}.html:`, error);
             throw error;
         });
 }
@@ -61,6 +61,13 @@ function updateActiveNavigation(page) {
     document.querySelectorAll(`[data-page="${page}"]`).forEach(btn => {
         btn.classList.add('active');
     });
+    
+    // Особенная логика для заданий
+    if (page.startsWith('assignment-')) {
+        document.querySelectorAll('[data-page="assignments"]').forEach(btn => {
+            btn.classList.add('active');
+        });
+    }
 }
 
 function setupMobileMenu() {
@@ -88,8 +95,15 @@ function setupEventListeners() {
         if (e.target.matches('.nav-item, .footer-link, [data-page]')) {
             e.preventDefault();
             const page = e.target.getAttribute('data-page');
-            showPage(page);
-            window.location.hash = page;
+            
+            // Особенная логика для кнопки "Задания"
+            if (page === 'assignments') {
+                showPage('assignment-drawing'); // По умолчанию открываем первое задание
+                window.location.hash = 'assignment-drawing';
+            } else {
+                showPage(page);
+                window.location.hash = page;
+            }
         }
         
         if (e.target.closest('#logo-home')) {
@@ -113,4 +127,3 @@ document.addEventListener('DOMContentLoaded', function() {
     const initialPage = hash || 'home';
     showPage(initialPage);
 });
-
