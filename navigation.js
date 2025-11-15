@@ -1,10 +1,6 @@
-// navigation.js
-console.log('=== NAVIGATION.JS LOADED SUCCESSFULLY ===');
-
 let contentCache = {};
 
 function showPage(page) {
-    console.log('Showing page:', page);
     const mainContent = document.getElementById('main-content');
     if (!mainContent) {
         console.error('Main content element not found!');
@@ -25,7 +21,7 @@ function showPage(page) {
             updateActiveNavigation(page);
         })
         .catch(error => {
-            console.error('Error loading page:', error);
+            console.error('Ошибка загрузки страницы:', error);
             mainContent.innerHTML = getErrorPage();
         });
 }
@@ -144,3 +140,4 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('Navigation initialized successfully!');
 });
+
