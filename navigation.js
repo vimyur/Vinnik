@@ -96,10 +96,10 @@ function setupEventListeners() {
             e.preventDefault();
             const page = e.target.getAttribute('data-page');
             
-            // Особенная логика для кнопки "Задания"
+            // Логика для кнопки "Задания"
             if (page === 'assignments') {
-                showPage('assignment-drawing'); // По умолчанию открываем первое задание
-                window.location.hash = 'assignment-drawing';
+                showPage('assignments'); // Открываем главную страницу заданий
+                window.location.hash = 'assignments';
             } else {
                 showPage(page);
                 window.location.hash = page;
@@ -118,7 +118,6 @@ function setupEventListeners() {
         showPage(page);
     });
 }
-
 document.addEventListener('DOMContentLoaded', function() {
     setupMobileMenu();
     setupEventListeners();
@@ -127,3 +126,4 @@ document.addEventListener('DOMContentLoaded', function() {
     const initialPage = hash || 'home';
     showPage(initialPage);
 });
+
