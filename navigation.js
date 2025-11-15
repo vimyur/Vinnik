@@ -15,10 +15,7 @@ function showPage(page) {
     }
     
     // Прокручиваем страницу вверх перед загрузкой
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
+    scrollToTop();
     
     // Загружаем и показываем индикатор загрузки
     loadPageContent('loading')
@@ -172,5 +169,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const initialPage = hash || 'home';
     showPage(initialPage);
 });
+
 
 
