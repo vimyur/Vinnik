@@ -50,26 +50,7 @@ function showPage(page) {
         });
 }
     
-    // Загружаем и показываем индикатор загрузки
-    loadPageContent('loading')
-        .then(loadingHTML => {
-            mainContent.innerHTML = loadingHTML;
-            
-            // После показа loading, загружаем основную страницу
-            return loadPageContent(page);
-        })
-        .then(pageHTML => {
-            mainContent.innerHTML = pageHTML;
-            updateActiveNavigation(page);
-        })
-        .catch(error => {
-            console.error('Ошибка загрузки страницы:', error);
-            loadPageContent('error')
-                .then(errorHTML => {
-                    mainContent.innerHTML = errorHTML;
-                });
-        });
-}
+    
 
 function loadPageContent(page) {
     if (contentCache[page]) {
@@ -169,6 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const initialPage = hash || 'home';
     showPage(initialPage);
 });
+
 
 
 
