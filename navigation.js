@@ -3,12 +3,15 @@ let contentCache = {};
 function showPage(page) {
     const mainContent = document.getElementById('main-content');
     if (!mainContent) {
-        console.error('Страница не найдена');
+        console.error('Страница не найдена!');
         return;
     }
     
     // Прокручиваем страницу вверх перед загрузкой
-    scrollToTop();
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
     
     // Загружаем и показываем индикатор загрузки
     loadPageContent('loading')
@@ -22,13 +25,13 @@ function showPage(page) {
             mainContent.innerHTML = pageHTML;
             updateActiveNavigation(page);
             
-        // Дополнительная прокрутка после загрузки контента
-        setTimeout(() => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'instant'
-            });
-        }, 100);
+            // Дополнительная прокрутка после загрузки контента
+            setTimeout(() => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'instant'
+                });
+            }, 100);
         })
         .catch(error => {
             console.error('Ошибка загрузки страницы:', error);
@@ -42,8 +45,6 @@ function showPage(page) {
                 });
         });
 }
-    
-    
 
 function loadPageContent(page) {
     if (contentCache[page]) {
@@ -53,19 +54,19 @@ function loadPageContent(page) {
     return fetch(`content/${page}.html`)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Ошибка загрузки ${page}.html - Статус: ${response.status}`);
+                throw new Error(`Failed to load ${page}.html - Status: ${response.status}`);
             }
             return response.text();
         })
         .then(content => {
             if (!content || content.trim() === '') {
-                throw new Error('Пустой файл');
+                throw new Error('Empty file content');
             }
             contentCache[page] = content;
             return content;
         })
         .catch(error => {
-            console.error(`Ошибка загрузки ${page}.html:`, error);
+            console.error(`Error loading ${page}.html:`, error);
             throw error;
         });
 }
@@ -135,6 +136,7 @@ function setupEventListeners() {
         showPage(page);
     });
 }
+
 document.addEventListener('DOMContentLoaded', function() {
     setupMobileMenu();
     setupEventListeners();
@@ -143,8 +145,3 @@ document.addEventListener('DOMContentLoaded', function() {
     const initialPage = hash || 'home';
     showPage(initialPage);
 });
-
-
-
-
-
