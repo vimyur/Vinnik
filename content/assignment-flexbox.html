@@ -1,0 +1,221 @@
+<div class="page assignment-page active">
+    <section class="hero-section">
+        <div class="hero-bg">
+            <img src="images/homeImage.webp" alt="Задание флексбокс" class="hero-bg-image" loading="eager">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <div class="container">
+                <h1 class="hero-title">ЗАДАНИЕ: FLEXBOX РОЛИК</h1>
+                <p class="hero-description">
+                    Интерактивная анимация с использованием CSS Flexbox и трансформаций
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Flexbox ролик "Заяц"</h2>
+                <p>Интерактивная CSS-анимация с hover и active эффектами</p>
+            </div>
+            
+            <!-- Встраиваем flexbox ролик -->
+            <div class="assignment-content">
+                <style>
+                    .flexbox-container {
+                        background: #f4f4f4;
+                        padding: 2rem;
+                        border-radius: var(--radius-2xl);
+                        margin: 2rem auto;
+                        max-width: 600px;
+                        text-align: center;
+                    }
+                    
+                    .flexbox-container h3 {
+                        color: var(--color-green);
+                        margin-bottom: 1rem;
+                    }
+                    
+                    /* Стили для flexbox ролика */
+                    .flexbox-roll-wrapper {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        min-height: 300px;
+                    }
+                    
+                    .flexbox-roll{
+                      position:relative;
+                      width:200px;height:200px;
+                      border:3px solid #aaa;
+                      overflow:hidden;
+                      background:#e9e9e9;
+                      cursor:pointer;
+                      transition:transform .25s ease;
+                    }
+                    .flexbox-roll:active{transform:scale(1.03);}  
+
+                    .caption{
+                      position:absolute;
+                      top:2%;
+                      left:0;
+                      width:100%;
+                      text-align:center;
+                      font-size:13px;
+                      color:#1c2e90;
+                      opacity:0;
+                      transition:opacity .2s;
+                      z-index:30;
+                    }
+                    .caption-active{
+                      position:absolute;
+                      top:15%;
+                      left:6px;
+                      transform:rotate(-30deg);
+                      font-size:13px;
+                      color:#1c2e90;
+                      opacity:0;
+                      transition:opacity .2s;
+                      z-index:30;
+                    }
+
+                    .rabbit-wrap{
+                      position:absolute;
+                      right:1%;
+                      bottom:1%;
+                      width:70%;
+                      z-index:10;
+                      pointer-events:none;
+                    }
+                    .rabbit-wrap img{
+                      position:absolute;
+                      right:0;
+                      bottom:0;
+                      width:115%;
+                    }
+                    .rabbit-body{z-index:1;}
+                    .rabbit-head1{z-index:2;
+                      opacity:1;
+                      transition:opacity .15s;
+                    }
+                    .rabbit-head2{
+                      z-index:3;
+                      opacity:0;
+                      transition:opacity .15s,transform .18s;
+                      transform-origin:60% 32%;
+                    }
+                    .flexbox-roll:hover .rabbit-head1{opacity:0;}
+                    .flexbox-roll:hover .rabbit-head2{
+                      opacity:1;
+                      animation:headmove .6s ease-in-out infinite alternate;
+                    }
+                    @keyframes headmove{from{transform:rotate(-2deg);}to{transform:rotate(5deg);}}
+
+                    .flexbox-roll:active .rabbit-head2{
+                      animation:headmove2 .45s ease-in-out infinite alternate;
+                    }
+                    @keyframes headmove2{from{transform:rotate(-2deg);}to{transform:rotate(5deg);}}
+
+                    .magnet{
+                      position:absolute;
+                      left:2%;bottom:-10px;
+                      width:66px;height:100px;
+                      background:url('../images/assignments/mag2.png') center/contain no-repeat;
+                      z-index:4;  
+                    }
+
+                    .spool{
+                      position:absolute;width:40px;height: 40px;
+                      background:url('../images/assignments/mag1.png') center/contain no-repeat;
+                      z-index:5;top:60%;
+                    }
+                    .spool.first{left:-1%;}
+                    .spool.second{left:18%;} 
+
+                    .magnet:hover ~ .spool {
+                      animation: spin 1.2s linear infinite;
+                    }
+                    @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg);}}
+
+                    .dot {
+                      position:absolute;
+                      width:8px;height:8px;
+                      border-radius:50%;
+                      background:rgb(225, 97, 46);
+                      z-index:10;
+                      left:0;top:0;
+                      opacity:0;
+                      offset-path: path('M18,120 C10,115 0,125 0,140 C0,155 10,165 18,160 C26,165 36,155 36,140 C36,125 46,115 56,120 C64,115 74,125 74,140 C74,155 64,165 56,160 C48,165 38,155 38,140 C38,125 28,115 18,120')
+                    }
+
+                    @keyframes figure8 {
+                      to {
+                        offset-distance: 100%;
+                      }
+                    }
+
+                    .flexbox-roll:active .dot {
+                      opacity: 1;
+                      animation: figure8 3s linear infinite;
+                    }
+
+                    .flexbox-roll:hover .caption{opacity:1;}
+                    .flexbox-roll:active .caption{opacity:0;}
+                    .flexbox-roll:active .caption-active{opacity:1;}
+                </style>
+                
+                <div class="flexbox-container">
+                    <h3>Flexbox ролик "Заяц"</h3>
+                    <div class="flexbox-roll-wrapper">
+                        <div class="flexbox-roll">
+                          <div class="magnet"></div>
+                          <div class="spool first"></div>
+                          <div class="spool second"></div>
+                          <div class="dot"></div>
+
+                          <div class="rabbit-wrap">
+                            <img src="../images/assignments/rabbit1.png" alt="" class="rabbit-body">
+                            <img src="../images/assignments/rabbit2.png" alt="" class="rabbit-head1">
+                            <img src="../images/assignments/rabbit3.png" alt="" class="rabbit-head2">
+                          </div>
+
+                          <div class="caption">что-то новенькое</div>
+                          <div class="caption-active">Ура! Играет!</div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 1rem; color: var(--color-text-light);">
+                        Интерактивный ролик: наведите курсор и кликните для анимации
+                    </p>
+                    <div style="margin-top: 1rem; font-size: 0.875rem; color: var(--color-text-light);">
+                        <strong>Инструкция:</strong> Наведите курсор на ролик, затем кликните и удерживайте для полной анимации
+                    </div>
+                </div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card card">
+                    <h3>Интерактивность</h3>
+                    <p>Hover эффекты, active состояния, CSS анимации, трансформации</p>
+                </div>
+                
+                <div class="feature-card card">
+                    <h3>Технологии</h3>
+                    <p>CSS Flexbox, позиционирование, ключевые кадры анимации, PNG спрайты</p>
+                </div>
+                
+                <div class="feature-card card">
+                    <h3>Сложность</h3>
+                    <p>Высокая - комбинация layout, анимаций и интерактивных элементов</p>
+                </div>
+            </div>
+
+            <div class="hero-actions" style="justify-content: center; margin-top: 3rem;">
+                <button class="btn btn-secondary" data-page="assignment-drawing">
+                    ← Вернуться к заданию "Рисунок CSS"
+                </button>
+            </div>
+        </div>
+    </section>
+</div>

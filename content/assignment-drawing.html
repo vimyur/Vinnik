@@ -1,0 +1,398 @@
+<div class="page assignment-page active">
+    <section class="hero-section">
+        <div class="hero-bg">
+            <img src="images/homeImage.webp" alt="Задание рисунок" class="hero-bg-image" loading="eager">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <div class="container">
+                <h1 class="hero-title">ЗАДАНИЕ: РИСУНОК CSS</h1>
+                <p class="hero-description">
+                    Создание графической композиции с использованием чистого CSS
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Рисунок "Комната с чайником"</h2>
+                <p>CSS-рисунок созданный с помощью позиционирования и градиентов</p>
+            </div>
+            
+            <!-- Встраиваем рисунок прямо в страницу -->
+            <div class="assignment-content">
+                <style>
+                    .css-drawing-container {
+                        background: #f4f4f4;
+                        padding: 2rem;
+                        border-radius: var(--radius-2xl);
+                        margin: 2rem auto;
+                        max-width: 600px;
+                        text-align: center;
+                    }
+                    
+                    .css-drawing-container h3 {
+                        color: var(--color-green);
+                        margin-bottom: 1rem;
+                    }
+                    
+                    .drawing-wrapper {
+                        background: #a9bc94;
+                        padding: 2rem;
+                        border-radius: 1rem;
+                        display: inline-block;
+                        border: 2px solid var(--color-dark);
+                    }
+                    
+                    /* Стили рисунка */
+                    .picture {
+                        width: 200px;
+                        height: 200px;
+                        background: #a9bc94; 
+                        margin: 0 auto;
+                        position: relative;
+                        border: 1px solid black;
+                    }
+
+                    /* Окно */
+                    .window {
+                        position: absolute;
+                        top: 30px;
+                        left: 47px;
+                        width: 105px;
+                        height: 105px;
+                        overflow: hidden;
+                        background: radial-gradient(at center, #ffffff, #4391df);
+                        border: 6px solid white;
+                        box-sizing: border-box;
+                    }
+                    
+                    /* Солнце */
+                    .window .sun {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        width: 30px;
+                        height: 30px;
+                        background: rgb(230, 230, 98);
+                        border-radius: 0 0 0 85%;
+                        box-shadow: 0 0 0 4px rgb(213, 198, 30);
+                    }
+
+                    /* Рамка */
+                    .frame-decor {
+                        position: absolute;
+                        top: 30px;
+                        left: 46px;
+                        width: 107px;
+                        height: 103px;
+                    }
+                    .frame-decor span {
+                        position: absolute;
+                        width: 12px;
+                        height: 12px;
+                        border: 5px solid #ffffff;
+                        border-radius: 50%;
+                        background: transparent;
+                    }
+                    /* сверху */
+                    .frame-decor .top { 
+                        top: -10px; 
+                    }
+                    .frame-decor .top-1 { left: 0; }
+                    .frame-decor .top-2 { left: 21px; }
+                    .frame-decor .top-3 { left: 42px; }
+                    .frame-decor .top-4 { left: 63px; }
+                    .frame-decor .top-5 { left: 84px; }
+
+                    /* слева */
+                    .frame-decor .left { 
+                        left: -10px; 
+                    }
+                    .frame-decor .left-1 { top: 0px; }
+                    .frame-decor .left-2 { top: 20px; }
+                    .frame-decor .left-3 { top: 40px; }
+                    .frame-decor .left-4 { top: 60px; }
+                    .frame-decor .left-5 { top: 82px; }
+
+                    /* справа*/
+                    .frame-decor .right { 
+                        right: -10px; 
+                    }
+                    .frame-decor .right-1 { top: 0px; }
+                    .frame-decor .right-2 { top: 20px; }
+                    .frame-decor .right-3 { top: 40px; }
+                    .frame-decor .right-4 { top: 60px; }
+                    .frame-decor .right-5 { top: 82px; }
+
+                    /*Чайник*/
+                    .teapot {
+                        position: absolute;
+                        top: 85px;
+                        left: 70px;
+                    }
+
+                    .teapot-base {
+                        position: absolute;
+                        width: 61px;
+                        height: 47px;
+                        background: radial-gradient(circle at 40% 50%, #ffffff 0%,#f28ea5 35%,#e52e4d 70%, #c9102e 100%);
+                        border-radius: 50%;
+                        top: -8px;
+                        left: -2px;
+                        z-index: 3; 
+                    }
+
+                    .teapot-lid {
+                        position: absolute;
+                        width: 40px;
+                        height: 33px;
+                        background: radial-gradient(circle at 30% 40%, #ffffff 0%,#f28ea5 35%,#e52e4d 70%, #c9102e 100%);
+                        border-radius: 50%;
+                        top: -20px;
+                        left: 6px;
+                        z-index: 2; 
+                    }
+
+                    .teapot-knob {
+                        position: absolute;
+                        width: 12px;
+                        height: 12px;
+                        background: #c9102e;
+                        border-radius: 50%;
+                        top: -25px;
+                        left: 20px;
+                        z-index: 1; 
+                        box-shadow: 0 0 2px #333;
+                    }
+
+                    .teapot-spout {
+                        position: absolute;
+                        width: 26px;
+                        height: 6px;
+                        background: #c9102e;
+                        top: 7px;
+                        left: -18px;
+                        transform: skew(-30deg) rotate(20deg);
+                        z-index: 2;
+                        }
+
+                    .teapot-handle {
+                        position: absolute;
+                        width: 18px;
+                        height: 18px;
+                        border: 3px solid #c9102e;
+                        border-radius: 50%;
+                        top: -3px;
+                        left: 46px;
+                        background: transparent;
+                        z-index: 2; 
+                        }
+
+                    .table {
+                        position: absolute;
+                        width: 93px;
+                        height: 12px;
+                        background-color: #c76d2c; 
+                        top: 118px;
+                        left: 53px;
+                        z-index: 4;
+
+                    }
+                    /* Ножка стола - вертикальный овал */
+                    .table::before {
+                        content: '';
+                        position: absolute;
+                        width: 20px;
+                        height: 55px;
+                        background-color: #c76d2c; 
+                        top: 7px; 
+                        left: 37px; 
+                        border-radius: 50%;
+                    }
+                    /* Основание стола - треугольник */
+                    .table::after {
+                        content: '';
+                        position: absolute;
+                        width: 0;
+                        height: 0;
+                        border-left: 17px solid transparent;
+                        border-right: 17px solid transparent;
+                        border-bottom: 30px solid #c76d2c; 
+                        top: 47px; 
+                        left: 30px; 
+                    }
+
+                    /*Стулья*/
+                    .chair {
+                        position: absolute;
+                        bottom: 20px;
+                        width: 65px;
+                        height: 110px;  
+                    }
+
+                    /* Левая спинка */
+                    .chair.left {
+                        left: 10px;
+                    }
+                    .chair.left::before {
+                        content: '';
+                        position: absolute;
+                        left: -39px;
+                        top: 0;
+                        width: 50px;
+                        height: 125px;
+                        background: transparent;
+                        border-right: 8px solid #c76d2c;
+                        border-radius: 0 100% 100% 0;
+                    }
+
+                    /* Правая спинка */
+                    .chair.right {
+                        right: 10px;
+                    }
+                    .chair.right::before {
+                        content: '';
+                        position: absolute;
+                        right: -39px;
+                        top: 0;
+                        width: 50px;
+                        height: 125px;
+                        background: transparent;
+                        border-left: 8px solid #c76d2c;
+                        border-radius: 100% 0 0 100%;
+                    }
+
+                    /* Сиденье */
+                    .chair .seat {
+                      position: absolute;
+                      bottom: 24px;        
+                      left: 10px;
+                      width: 45px;
+                      height: 10px;
+                      background: #c76d2c;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      gap: 6px;               
+
+                    }
+
+                    .chair .seat .rivet {
+                      width: 6px;
+                      height: 6px;
+                      background: #773f1a;
+                      display: inline-block;
+                      transform: rotate(45deg); 
+                      transform-origin: center;
+                      border-radius: 1px;
+                    }
+
+                    /* Ножки */
+                    .chair .leg {
+                        position: absolute;
+                        bottom: -16px;
+                        width: 8px;
+                        height: 40px;
+                        background: #c76d2c;
+                    }
+                    .chair.left .leg {
+                        left: 39px;
+                    }
+                    .chair.right .leg {
+                        right: 39px;
+                    }
+                </style>
+                
+                <div class="css-drawing-container">
+                    <h3>CSS Рисунок "Комната с чайником"</h3>
+                    <div class="drawing-wrapper">
+                        <div class="picture">
+                            <div class="frame-decor">
+                                <span class="top top-1"></span>
+                                <span class="top top-2"></span>
+                                <span class="top top-3"></span>
+                                <span class="top top-4"></span>
+                                <span class="top top-5"></span>
+                                
+                                <span class="left left-1"></span>
+                                <span class="left left-2"></span>
+                                <span class="left left-3"></span>
+                                <span class="left left-4"></span>
+                                <span class="left left-5"></span>
+                                
+                                <span class="right right-1"></span>
+                                <span class="right right-2"></span>
+                                <span class="right right-3"></span>
+                                <span class="right right-4"></span>
+                                <span class="right right-5"></span>
+                            </div>
+
+                            <div class="window">
+                                <div class="sun"></div>
+                            </div>
+
+                            <div class="teapot">
+                                <div class="teapot-lid"></div>  
+                                <div class="teapot-base"></div> 
+                                <div class="teapot-knob"></div> 
+                                <div class="teapot-spout"></div> 
+                                <div class="teapot-handle"></div> 
+                            </div>
+
+                            <div class="table"></div>
+
+                            <div class="chair left">
+                                <div class="seat">
+                                    <span class="rivet"></span>
+                                    <span class="rivet"></span>
+                                    <span class="rivet"></span>
+                                </div>
+                                <div class="leg"></div>
+                            </div>
+
+                            <div class="chair right">
+                                <div class="seat">
+                                    <span class="rivet"></span>
+                                    <span class="rivet"></span>
+                                    <span class="rivet"></span>
+                                    <span class="rivet"></span>
+                                    <span class="rivet"></span>
+                                </div>
+                                <div class="leg"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 1rem; color: var(--color-text-light);">
+                        Рисунок создан с использованием чистого CSS: позиционирование, градиенты, псевдоэлементы
+                    </p>
+                </div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card card">
+                    <h3>Техники CSS</h3>
+                    <p>Position absolute, градиенты, псевдоэлементы, трансформации, border-radius</p>
+                </div>
+                
+                <div class="feature-card card">
+                    <h3>Элементы композиции</h3>
+                    <p>Окно с солнцем, рамка с декоративными элементами, чайник, стол, стулья</p>
+                </div>
+                
+                <div class="feature-card card">
+                    <h3>Сложность</h3>
+                    <p>Средняя - требуется точное позиционирование и работа с наслоением элементов</p>
+                </div>
+            </div>
+
+            <div class="hero-actions" style="justify-content: center; margin-top: 3rem;">
+                <button class="btn btn-primary" data-page="assignment-flexbox">
+                    Перейти к заданию "Flexbox ролик" →
+                </button>
+            </div>
+        </div>
+    </section>
+</div>
