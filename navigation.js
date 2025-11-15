@@ -3,7 +3,14 @@ let contentCache = {};
 function showPage(page) {
     const mainContent = document.getElementById('main-content');
     if (!mainContent) {
-        console.error('Страница не найдена!');
+        console.error('Main content element not found!');
+        return;
+    }
+
+    function showPage(page) {
+    const mainContent = document.getElementById('main-content');
+    if (!mainContent) {
+        console.error('Main content element not found!');
         return;
     }
     
@@ -25,13 +32,13 @@ function showPage(page) {
             mainContent.innerHTML = pageHTML;
             updateActiveNavigation(page);
             
-            // Дополнительная прокрутка после загрузки контента
-            setTimeout(() => {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'instant'
-                });
-            }, 100);
+        // Дополнительная прокрутка после загрузки контента
+        setTimeout(() => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'instant'
+            });
+        }, 100);
         })
         .catch(error => {
             console.error('Ошибка загрузки страницы:', error);
@@ -42,6 +49,27 @@ function showPage(page) {
                         top: 0,
                         behavior: 'smooth'
                     });
+                });
+        });
+}
+    
+    // Загружаем и показываем индикатор загрузки
+    loadPageContent('loading')
+        .then(loadingHTML => {
+            mainContent.innerHTML = loadingHTML;
+            
+            // После показа loading, загружаем основную страницу
+            return loadPageContent(page);
+        })
+        .then(pageHTML => {
+            mainContent.innerHTML = pageHTML;
+            updateActiveNavigation(page);
+        })
+        .catch(error => {
+            console.error('Ошибка загрузки страницы:', error);
+            loadPageContent('error')
+                .then(errorHTML => {
+                    mainContent.innerHTML = errorHTML;
                 });
         });
 }
@@ -136,7 +164,6 @@ function setupEventListeners() {
         showPage(page);
     });
 }
-
 document.addEventListener('DOMContentLoaded', function() {
     setupMobileMenu();
     setupEventListeners();
@@ -145,3 +172,4 @@ document.addEventListener('DOMContentLoaded', function() {
     const initialPage = hash || 'home';
     showPage(initialPage);
 });
+
