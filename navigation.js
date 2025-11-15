@@ -7,27 +7,28 @@ function showPage(page) {
         return;
     }
     
-    // Показываем индикатор загрузки
-    mainContent.innerHTML = `
-        <div class="loading-indicator">
-            <div class="spinner"></div>
-            <p>Загрузка...</p>
-        </div>
-    `;
-    
-    loadPageContent(page)
-        .then(content => {
-            mainContent.innerHTML = content;
+    // Загружаем и показываем индикатор загрузки
+    loadPageContent('loading')
+        .then(loadingHTML => {
+            mainContent.innerHTML = loadingHTML;
+            
+            // После показа loading, загружаем основную страницу
+            return loadPageContent(page);
+        })
+        .then(pageHTML => {
+            mainContent.innerHTML = pageHTML;
             updateActiveNavigation(page);
         })
         .catch(error => {
             console.error('Ошибка загрузки страницы:', error);
-            mainContent.innerHTML = getErrorPage();
+            loadPageContent('error')
+                .then(errorHTML => {
+                    mainContent.innerHTML = errorHTML;
+                });
         });
 }
 
 function loadPageContent(page) {
-    // Используем кэш если есть
     if (contentCache[page]) {
         return Promise.resolve(contentCache[page]);
     }
@@ -43,7 +44,6 @@ function loadPageContent(page) {
             if (!content || content.trim() === '') {
                 throw new Error('Empty file content');
             }
-            console.log(`Successfully loaded ${page}.html`);
             contentCache[page] = content;
             return content;
         })
@@ -51,26 +51,6 @@ function loadPageContent(page) {
             console.error(`Error loading ${page}.html:`, error);
             throw error;
         });
-}
-
-function getErrorPage() {
-    return `
-        <div class="page error-page active">
-            <section class="hero-section">
-                <div class="hero-content">
-                    <div class="container">
-                        <h1 class="hero-title">Ошибка загрузки</h1>
-                        <p class="hero-description">
-                            Не удалось загрузить содержимое страницы. Проверьте наличие файлов в папке content/
-                        </p>
-                        <button class="btn btn-primary" data-page="home">
-                            На главную
-                        </button>
-                    </div>
-                </div>
-            </section>
-        </div>
-    `;
 }
 
 function updateActiveNavigation(page) {
@@ -119,25 +99,17 @@ function setupEventListeners() {
         }
     });
     
-    // Обработка браузерной навигации
     window.addEventListener('popstate', function() {
         const page = window.location.hash.replace('#', '') || 'home';
         showPage(page);
     });
 }
 
-// Инициализация
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM Content Loaded - Initializing Navigation');
-    
     setupMobileMenu();
     setupEventListeners();
     
-    // Показываем страницу из хэша или главную
     const hash = window.location.hash.replace('#', '');
     const initialPage = hash || 'home';
     showPage(initialPage);
-    
-    console.log('Navigation initialized successfully!');
 });
-
