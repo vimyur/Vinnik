@@ -1,27 +1,12 @@
 <div class="page assignment-page active">
-    <section class="hero-section">
-        <div class="hero-bg">
-            <img src="images/homeImage.webp" alt="Задание рисунок" class="hero-bg-image" loading="eager">
-            <div class="hero-overlay"></div>
-        </div>
-        <div class="hero-content">
-            <div class="container">
-                <h1 class="hero-title">ЗАДАНИЕ: РИСУНОК CSS</h1>
-                <p class="hero-description">
-                    Создание графической композиции с использованием чистого CSS
-                </p>
-            </div>
-        </div>
-    </section>
-
     <section class="section">
         <div class="container">
             <div class="section-header">
-                <h2>Рисунок "Комната с чайником"</h2>
-                <p>CSS-рисунок созданный с помощью позиционирования и градиентов</p>
+                <h2>Задание: Рисунок CSS</h2>
+                <p>Создание графической композиции "Комната с чайником"</p>
             </div>
             
-            <!-- Встраиваем рисунок прямо в страницу -->
+            <!-- Контейнер с рисунком -->
             <div class="assignment-content">
                 <style>
                     .css-drawing-container {
@@ -31,11 +16,6 @@
                         margin: 2rem auto;
                         max-width: 600px;
                         text-align: center;
-                    }
-                    
-                    .css-drawing-container h3 {
-                        color: var(--color-green);
-                        margin-bottom: 1rem;
                     }
                     
                     .drawing-wrapper {
@@ -97,30 +77,21 @@
                         border-radius: 50%;
                         background: transparent;
                     }
-                    /* сверху */
-                    .frame-decor .top { 
-                        top: -10px; 
-                    }
+                    .frame-decor .top { top: -10px; }
                     .frame-decor .top-1 { left: 0; }
                     .frame-decor .top-2 { left: 21px; }
                     .frame-decor .top-3 { left: 42px; }
                     .frame-decor .top-4 { left: 63px; }
                     .frame-decor .top-5 { left: 84px; }
 
-                    /* слева */
-                    .frame-decor .left { 
-                        left: -10px; 
-                    }
+                    .frame-decor .left { left: -10px; }
                     .frame-decor .left-1 { top: 0px; }
                     .frame-decor .left-2 { top: 20px; }
                     .frame-decor .left-3 { top: 40px; }
                     .frame-decor .left-4 { top: 60px; }
                     .frame-decor .left-5 { top: 82px; }
 
-                    /* справа*/
-                    .frame-decor .right { 
-                        right: -10px; 
-                    }
+                    .frame-decor .right { right: -10px; }
                     .frame-decor .right-1 { top: 0px; }
                     .frame-decor .right-2 { top: 20px; }
                     .frame-decor .right-3 { top: 40px; }
@@ -177,7 +148,7 @@
                         left: -18px;
                         transform: skew(-30deg) rotate(20deg);
                         z-index: 2;
-                        }
+                    }
 
                     .teapot-handle {
                         position: absolute;
@@ -189,7 +160,7 @@
                         left: 46px;
                         background: transparent;
                         z-index: 2; 
-                        }
+                    }
 
                     .table {
                         position: absolute;
@@ -199,9 +170,8 @@
                         top: 118px;
                         left: 53px;
                         z-index: 4;
-
                     }
-                    /* Ножка стола - вертикальный овал */
+
                     .table::before {
                         content: '';
                         position: absolute;
@@ -212,7 +182,7 @@
                         left: 37px; 
                         border-radius: 50%;
                     }
-                    /* Основание стола - треугольник */
+
                     .table::after {
                         content: '';
                         position: absolute;
@@ -233,7 +203,6 @@
                         height: 110px;  
                     }
 
-                    /* Левая спинка */
                     .chair.left {
                         left: 10px;
                     }
@@ -249,7 +218,6 @@
                         border-radius: 0 100% 100% 0;
                     }
 
-                    /* Правая спинка */
                     .chair.right {
                         right: 10px;
                     }
@@ -265,7 +233,6 @@
                         border-radius: 100% 0 0 100%;
                     }
 
-                    /* Сиденье */
                     .chair .seat {
                       position: absolute;
                       bottom: 24px;        
@@ -277,7 +244,6 @@
                       align-items: center;
                       justify-content: center;
                       gap: 6px;               
-
                     }
 
                     .chair .seat .rivet {
@@ -290,7 +256,6 @@
                       border-radius: 1px;
                     }
 
-                    /* Ножки */
                     .chair .leg {
                         position: absolute;
                         bottom: -16px;
@@ -307,7 +272,6 @@
                 </style>
                 
                 <div class="css-drawing-container">
-                    <h3>CSS Рисунок "Комната с чайником"</h3>
                     <div class="drawing-wrapper">
                         <div class="picture">
                             <div class="frame-decor">
@@ -365,32 +329,13 @@
                             </div>
                         </div>
                     </div>
-                    <p style="margin-top: 1rem; color: var(--color-text-light);">
-                        Рисунок создан с использованием чистого CSS: позиционирование, градиенты, псевдоэлементы
-                    </p>
                 </div>
             </div>
 
-            <div class="features-grid">
-                <div class="feature-card card">
-                    <h3>Техники CSS</h3>
-                    <p>Position absolute, градиенты, псевдоэлементы, трансформации, border-radius</p>
-                </div>
-                
-                <div class="feature-card card">
-                    <h3>Элементы композиции</h3>
-                    <p>Окно с солнцем, рамка с декоративными элементами, чайник, стол, стулья</p>
-                </div>
-                
-                <div class="feature-card card">
-                    <h3>Сложность</h3>
-                    <p>Средняя - требуется точное позиционирование и работа с наслоением элементов</p>
-                </div>
-            </div>
-
-            <div class="hero-actions" style="justify-content: center; margin-top: 3rem;">
+            <!-- Кнопка перехода -->
+            <div class="hero-actions" style="justify-content: center; margin-top: 2rem;">
                 <button class="btn btn-primary" data-page="assignment-flexbox">
-                    Перейти к заданию "Flexbox ролик" →
+                    Следующее задание →
                 </button>
             </div>
         </div>
