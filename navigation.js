@@ -36,19 +36,19 @@ function loadPageContent(page) {
     return fetch(`content/${page}.html`)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to load ${page}.html - Status: ${response.status}`);
+                throw new Error(`Ошибка загрузки ${page}.html - Статус: ${response.status}`);
             }
             return response.text();
         })
         .then(content => {
             if (!content || content.trim() === '') {
-                throw new Error('Empty file content');
+                throw new Error('Пустая страница');
             }
             contentCache[page] = content;
             return content;
         })
         .catch(error => {
-            console.error(`Error loading ${page}.html:`, error);
+            console.error(`Ошибка загрузки ${page}.html:`, error);
             throw error;
         });
 }
@@ -113,3 +113,4 @@ document.addEventListener('DOMContentLoaded', function() {
     const initialPage = hash || 'home';
     showPage(initialPage);
 });
+
