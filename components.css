@@ -76,8 +76,8 @@
     font-size: 0.75rem;
     letter-spacing: 0.05em;
     line-height: 1;
-    font-family: var(--font-primary); 
-    font-weight: 500; 
+    font-family: var(--font-primary);
+    font-weight: 500;
 }
 
 .logo-title {
@@ -282,19 +282,16 @@
 }
 
 .btn-primary {
-    background: var(--color-green) !important;
+    background: var(--color-green);
     color: var(--color-white);
     box-shadow: var(--shadow-md);
     border: 1px solid var(--color-green);
-    opacity: 1 !important;
 }
 
 .btn-primary:hover {
-    background: var(--color-green) !important;
     box-shadow: var(--shadow-lg);
     transform: scale(1.05);
     filter: brightness(0.9);
-    opacity: 1 !important;
 }
 
 .btn-primary:active {
@@ -308,36 +305,12 @@
 }
 
 .btn-secondary:hover {
-    background: var(--color-beige);
     transform: scale(1.05);
     filter: brightness(0.9);
 }
 
 .btn-secondary:active {
     transform: scale(0.95);
-}
-
-/* Иконки */
-.icon-container {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--color-green);
-    box-shadow: var(--shadow-md);
-    transition: all 0.3s ease;
-    margin: 0 auto 1.5rem;
-}
-
-.card:hover .icon-container {
-    transform: scale(1.1);
-}
-
-.feature-icon {
-    font-size: 1.5rem;
-    color: var(--color-white);
 }
 
 /* Изображения */
@@ -414,7 +387,7 @@
     text-align: left;
     padding: 0;
     transition: color 0.3s ease;
-    font-family: var(--font-primary); /* Добавлено для единообразия */
+    font-family: var(--font-primary);
 }
 
 .footer-link:hover {
@@ -478,24 +451,6 @@
     height: 0.25rem;
     border-radius: 50%;
     background: var(--color-green);
-}
-
-/* ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ДЛЯ КОНТЕНТА */
-
-/* Бейдж */
-.inline-badge {
-    display: inline-block;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 0.5rem 1rem;
-    border-radius: 2rem;
-    margin-bottom: 1rem;
-    backdrop-filter: blur(10px);
-}
-
-.badge-text {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--color-white);
 }
 
 /* Сетки */
@@ -678,7 +633,29 @@
     font-weight: bold;
 }
 
-/* Legends grid */
+.timeline-era {
+    background: var(--color-green);
+    color: var(--color-white);
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+.timeline-content h4 {
+    color: var(--color-green);
+    margin: 1rem 0 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+.timeline-content p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+/* Legends */
 .legends-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -726,6 +703,103 @@
     border-radius: 1rem;
     font-size: 0.875rem;
     color: var(--color-text-light);
+}
+
+.legend-contribution {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-beige);
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+}
+
+.legend-contribution strong {
+    color: var(--color-green);
+}
+
+/* Horizontal Legends Grid */
+.horizontal-legends-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.horizontal-legend-card {
+    display: flex;
+    gap: 2rem;
+    background: var(--color-white);
+    border-radius: var(--radius-2xl);
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-beige);
+    transition: all 0.3s ease;
+}
+
+.horizontal-legend-card:hover {
+    transform: translateY(-0.25rem);
+    box-shadow: var(--shadow-lg);
+}
+
+.legend-image-container {
+    flex: 0 0 200px;
+}
+
+.legend-image-container .legend-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: var(--radius-xl);
+}
+
+.horizontal-legend-card .legend-content {
+    flex: 1;
+}
+
+.horizontal-legend-card .legend-name {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-dark);
+}
+
+.horizontal-legend-card .legend-role {
+    color: var(--color-green);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.horizontal-legend-card p {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+}
+
+.horizontal-legend-card .legend-contribution {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-beige);
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+}
+
+.horizontal-legend-card .legend-contribution strong {
+    color: var(--color-green);
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+    .horizontal-legend-card {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .legend-image-container {
+        flex: 0 0 auto;
+    }
+    
+    .legend-image-container .legend-image {
+        height: 150px;
+    }
 }
 
 /* Секция с информационной сноской */
@@ -821,191 +895,7 @@
     font-size: 0.875rem;
 }
 
-/* Адаптивность для мобильных */
-@media (max-width: 768px) {
-    .info-content p {
-        font-size: 1rem;
-        text-align: left;
-    }
-    
-    .quote-card {
-        padding: 2rem 1rem;
-    }
-    
-    .quote-text {
-        font-size: 1.25rem;
-    }
-}
-
-.timeline-era {
-    background: var(--color-green);
-    color: var(--color-white);
-    padding: 0.5rem 1rem;
-    border-radius: 1rem;
-    font-weight: 600;
-    display: inline-block;
-    margin-bottom: 1rem;
-    font-size: 0.875rem;
-}
-
-.timeline-content h4 {
-    color: var(--color-green);
-    margin: 1rem 0 0.5rem 0;
-    font-size: 1.1rem;
-}
-
-.timeline-content p {
-    margin-bottom: 1rem;
-    line-height: 1.6;
-}
-
-.legend-contribution {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--color-beige);
-    font-size: 0.875rem;
-    color: var(--color-text-light);
-}
-
-.legend-contribution strong {
-    color: var(--color-green);
-}
-
-/* Text Note Section */
-.info-section .info-content {
-    max-width: 900px;
-    margin: 0 auto;
-    text-align: left;
-}
-
-.info-section .info-content p {
-    margin-bottom: 1.5rem;
-    line-height: 1.7;
-    font-size: 1.1rem;
-}
-
-/* Section Headers */
-.section-header h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: var(--color-dark);
-}
-
-.section-header p {
-    font-size: 1.125rem;
-    color: var(--color-text-light);
-    max-width: 600px;
-    margin: 0 auto;
-}
-/* Horizontal Legends Grid */
-.horizontal-legends-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
-}
-
-.horizontal-legend-card {
-    display: flex;
-    gap: 2rem;
-    background: var(--color-white);
-    border-radius: var(--radius-2xl);
-    padding: 2rem;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--color-beige);
-    transition: all 0.3s ease;
-}
-
-.horizontal-legend-card:hover {
-    transform: translateY(-0.25rem);
-    box-shadow: var(--shadow-lg);
-}
-
-.legend-image-container {
-    flex: 0 0 200px;
-}
-
-.legend-image-container .legend-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: var(--radius-xl);
-}
-
-.horizontal-legend-card .legend-content {
-    flex: 1;
-}
-
-.horizontal-legend-card .legend-name {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-    color: var(--color-dark);
-}
-
-.horizontal-legend-card .legend-role {
-    color: var(--color-green);
-    font-weight: 600;
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
-}
-
-.horizontal-legend-card p {
-    line-height: 1.6;
-    margin-bottom: 1rem;
-    color: var(--color-text);
-}
-
-.horizontal-legend-card .legend-contribution {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--color-beige);
-    font-size: 0.9rem;
-    color: var(--color-text-light);
-}
-
-.horizontal-legend-card .legend-contribution strong {
-    color: var(--color-green);
-}
-
-/* Адаптивность для мобильных */
-@media (max-width: 768px) {
-    .horizontal-legend-card {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .legend-image-container {
-        flex: 0 0 auto;
-    }
-    
-    .legend-image-container .legend-image {
-        height: 150px;
-    }
-}
-.section.legends-gallery .features-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.section.legends-gallery .feature-card {
-    flex: 0 1 350px;
-    background: var(--color-white);
-    border: 1px solid var(--color-beige);
-    border-radius: var(--radius-2xl);
-    padding: 2rem;
-    box-shadow: var(--shadow-md);
-    transition: all 0.3s ease;
-    text-align: center;
-}
-
-.section.legends-gallery .feature-card:hover {
-    transform: translateY(-0.25rem);
-    box-shadow: var(--shadow-lg);
-}
-
+/* Influence Sections */
 .influence-content {
     max-width: 900px;
     margin: 0 auto;
@@ -1023,42 +913,6 @@
     margin-bottom: 0;
 }
 
-/* Section Background Alternation */
-.section.influence-impact {
-    background: var(--color-white);
-}
-
-.section.history-timeline {
-    background: var(--color-beige);
-}
-
-/* Section Header Improvements */
-.section-header h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: var(--color-dark);
-}
-
-.section-header p {
-    font-size: 1.125rem;
-    color: var(--color-text-light);
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .influence-content p {
-        font-size: 1rem;
-        text-align: left;
-    }
-    
-    .section-header h2 {
-        font-size: 2rem;
-    }
-}
-
-/* Influence Subsection Styles */
 .influence-subsection {
     margin-bottom: 2.5rem;
     padding-bottom: 2rem;
@@ -1086,40 +940,7 @@
     color: var(--color-text);
 }
 
-/* Improved spacing for influence sections */
-.influence-content {
-    max-width: 900px;
-    margin: 0 auto;
-    text-align: left;
-}
-
-/* Better visual hierarchy */
-.section.influence-impact .influence-subsection h3 {
-    color: var(--color-green);
-}
-
-.section.history-timeline .influence-subsection h3 {
-    color: var(--color-dark);
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .influence-subsection {
-        margin-bottom: 2rem;
-        padding-bottom: 1.5rem;
-    }
-    
-    .influence-subsection h3 {
-        font-size: 1.1rem;
-    }
-    
-    .influence-subsection p {
-        font-size: 1rem;
-    }
-}
-
-/* Стили для элементов с изображениями */
-/* Исправление для element-with-image */
+/* Элементы с изображениями */
 .element-with-image {
     display: flex;
     flex-direction: column;
@@ -1127,18 +948,10 @@
     margin-bottom: 3rem;
 }
 
-/* Убедимся, что features-grid имеет правильные отступы */
 .element-with-image .features-grid {
     margin-top: 1rem;
 }
 
-/* Дополнительные отступы для карточек в секциях элементов */
-.section.elements-detail .feature-card,
-.section.history-timeline .feature-card {
-    margin-top: 0.5rem;
-}
-
-/* Улучшенные стили для изображений элементов */
 .element-image-container {
     width: 100%;
     height: 400px;
@@ -1152,43 +965,28 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center; 
+    object-position: center;
     transition: transform 0.7s ease;
 }
 
-/* Индивидуальные настройки позиционирования для каждого элемента */
 .element-image-container[data-element="mcing"] .element-image {
-    object-position: center 40%; /* Для MCing - фокус на верхней части */
+    object-position: center 40%;
 }
 
 .element-image-container[data-element="djing"] .element-image {
-    object-position: center 40%; /* Для DJing - фокус по центру */
+    object-position: center 40%;
 }
 
 .element-image-container[data-element="breaking"] .element-image {
-    object-position: center 60%; /* Для Breaking - фокус на танцоре */
+    object-position: center 60%;
 }
 
 .element-image-container[data-element="graffiti"] .element-image {
-    object-position: center 52%; /* Для Graffiti - фокус на верхней части работы */
+    object-position: center 52%;
 }
-
-
 
 .element-image:hover {
     transform: scale(1.05);
-}
-
-/* Адаптивность для мобильных */
-@media (max-width: 768px) {
-    .element-with-image {
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-    
-    .element-image-container {
-        max-height: 250px;
-    }
 }
 
 /* Индикатор загрузки */
@@ -1219,8 +1017,46 @@
 .loading-indicator p {
     color: var(--color-text-light);
     font-size: 1rem;
-
 }
 
-
-
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+    .info-content p {
+        font-size: 1rem;
+        text-align: left;
+    }
+    
+    .quote-card {
+        padding: 2rem 1rem;
+    }
+    
+    .quote-text {
+        font-size: 1.25rem;
+    }
+    
+    .influence-subsection {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+    }
+    
+    .influence-subsection h3 {
+        font-size: 1.1rem;
+    }
+    
+    .influence-subsection p {
+        font-size: 1rem;
+    }
+    
+    .element-with-image {
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .element-image-container {
+        max-height: 250px;
+    }
+    
+    .section-header h2 {
+        font-size: 2rem;
+    }
+}
