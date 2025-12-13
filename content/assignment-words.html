@@ -45,21 +45,23 @@
                         padding: 2rem;
                         box-shadow: var(--shadow-md);
                         border: 1px solid var(--color-beige);
+                        min-height: 600px;
                     }
                     
-                    /* Адаптация стилей под вашу систему */
-                    .words-app-body { 
-                        font-family: 'Montserrat', Arial, sans-serif;  
-                        margin: 0; 
-                        padding: 20px; 
-                        background: #f7f7f7; 
+                    /* Адаптация стилей приложения */
+                    #wordsApp {
+                        font-family: 'Montserrat', Arial, sans-serif;
+                        margin: 0;
+                        padding: 0;
+                        background: #f7f7f7;
+                        height: 100%;
                     }
-
-                    .words-app-block3 { 
-                        width: 100%; 
-                        height: 120px; 
-                        border: 2px solid rgb(140, 17, 17); 
-                        margin-bottom: 20px; 
+                    
+                    #wordsApp .block3 {
+                        width: 100%;
+                        height: 120px;
+                        border: 2px solid rgb(140, 17, 17);
+                        margin-bottom: 20px;
                         background: #ffe5e5;
                         padding: 10px;
                         display: flex;
@@ -70,8 +72,8 @@
                         overflow-y: auto;
                         font-family: 'Montserrat', Arial, sans-serif;
                     }
-
-                    .words-app-layout {
+                    
+                    #wordsApp .layout {
                         display: flex;
                         gap: 20px;
                         width: 100%;
@@ -79,8 +81,8 @@
                         min-height: 400px;
                         font-family: 'Montserrat', Arial, sans-serif;
                     }
-
-                    .words-app-block2 {
+                    
+                    #wordsApp .block2 {
                         width: 30%;
                         border: 2px solid #000;
                         background: #ffffff;
@@ -93,16 +95,16 @@
                         gap: 5px;
                         font-family: 'Montserrat', Arial, sans-serif;
                     }
-
-                    .words-app-rightSide {
+                    
+                    #wordsApp .rightSide {
                         width: 70%;
                         display: flex;
                         flex-direction: column;
                         box-sizing: border-box;
                         font-family: 'Montserrat', Arial, sans-serif;
                     }
-
-                    .words-app-upperInput {
+                    
+                    #wordsApp .upperInput {
                         display: flex;
                         gap: 10px;
                         margin-bottom: 10px;
@@ -110,8 +112,8 @@
                         box-sizing: border-box;
                         font-family: 'Montserrat', Arial, sans-serif;
                     }
-
-                    .words-app-inputText {
+                    
+                    #wordsApp .inputText {
                         flex-grow: 1;
                         height: 34px;
                         padding: 4px 8px;
@@ -121,8 +123,8 @@
                         border: 1px solid var(--color-beige);
                         border-radius: var(--radius);
                     }
-
-                    .words-app-processBtn {
+                    
+                    #wordsApp .processBtn {
                         height: 34px;
                         padding: 0 12px;
                         font-size: 14px;
@@ -135,13 +137,13 @@
                         font-weight: 500;
                         transition: all 0.3s ease;
                     }
-
-                    .words-app-processBtn:hover {
+                    
+                    #wordsApp .processBtn:hover {
                         background-color: #45a049;
                         transform: scale(1.05);
                     }
-
-                    .words-app-block1 {
+                    
+                    #wordsApp .block1 {
                         flex-grow: 1;
                         border: 2px solid blue;
                         background: #e8f0ff;
@@ -152,41 +154,68 @@
                         position: relative;
                         font-family: 'Montserrat', Arial, sans-serif;
                     }
-
-                    .words-app-item { 
-                        padding: 8px 16px; 
-                        background: #9fda9f; 
-                        cursor: grab; 
-                        user-select: none; 
+                    
+                    #wordsApp .item {
+                        padding: 8px 16px;
+                        background: #9fda9f;
+                        cursor: grab;
+                        user-select: none;
                         border-radius: 20px 4px 4px 20px;
                         transition: transform 0.2s;
                         font-size: 14px;
                         height: fit-content;
                         font-family: 'Montserrat', Arial, sans-serif;
                         font-weight: 500;
+                        margin: 2px;
                     }
-
-                    .words-app-item:hover {
+                    
+                    #wordsApp .item:hover {
                         transform: scale(1.05);
                     }
-
-                    .words-app-item.dragging {
+                    
+                    #wordsApp .item.dragging {
                         opacity: 0.5;
                     }
-
-                    .words-app-block3-item {
+                    
+                    #wordsApp .block3-item {
                         cursor: default;
                         font-family: 'Montserrat', Arial, sans-serif;
                         font-weight: 500;
+                        padding: 6px 10px;
+                        margin: 2px;
+                        background: transparent;
+                        border: none;
+                    }
+                    
+                    /* Заглушка для пустых блоков */
+                    #wordsApp .block2:empty::after,
+                    #wordsApp .block1:empty::after,
+                    #wordsApp .block3:empty::after {
+                        content: attr(data-placeholder);
+                        color: #666;
+                        padding: 10px;
+                        font-family: 'Montserrat', Arial, sans-serif;
+                        display: block;
+                    }
+                    
+                    #wordsApp .block2:empty::after {
+                        content: "Блок 2 (исходные элементы)";
+                    }
+                    
+                    #wordsApp .block1:empty::after {
+                        content: "Блок 1 (зона перетаскивания)";
+                    }
+                    
+                    #wordsApp .block3:empty::after {
+                        content: "Блок 3 (нажмите на слова в синем блоке)";
                     }
                 </style>
                 
                 <div class="words-container">
                     <h3>Drag & Drop приложение "Слова"</h3>
                     <div class="words-app-wrapper">
-                        <div id="words-app">
-                            <!-- Структура приложения будет вставлена через JavaScript -->
-                        </div>
+                        <!-- Приложение будет вставлено здесь -->
+                        <div id="wordsApp"></div>
                     </div>
                     
                     <div style="margin-top: 1rem; color: var(--color-text-light);">
@@ -236,280 +265,319 @@
 </div>
 
 <script>
-    // Встраиваем JavaScript код приложения
-    document.addEventListener('DOMContentLoaded', function() {
-        const wordsApp = document.getElementById('words-app');
+// Инициализация приложения после загрузки страницы
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Инициализация приложения "Слова"...');
+    
+    // Создаем HTML структуру
+    const wordsApp = document.getElementById('wordsApp');
+    if (!wordsApp) {
+        console.error('Не найден элемент wordsApp');
+        return;
+    }
+    
+    wordsApp.innerHTML = `
+        <div class="block3" data-placeholder="Блок 3 (нажмите на слова в синем блоке)"></div>
         
-        // Создаем структуру приложения
-        wordsApp.innerHTML = `
-            <div class="words-app-body">
-                <div class="words-app-block3">Блок 3 (нажмите на слова в синем блоке)</div>
-                
-                <div class="words-app-layout">
-                    <div class="words-app-block2">Блок 2 (исходные элементы)</div>
-                    
-                    <div class="words-app-rightSide">
-                        <div class="words-app-upperInput">
-                            <input type="text" class="words-app-inputText" id="wordsInputText" placeholder="лес-бочка-бык-крик-3-Бок">
-                            <button class="words-app-processBtn" id="wordsProcessBtn">Разобрать</button>
-                        </div>
-                        
-                        <div class="words-app-block1">Блок 1 (зона перетаскивания)</div>
-                    </div>
+        <div class="layout">
+            <div class="block2" data-placeholder="Блок 2 (исходные элементы)"></div>
+            
+            <div class="rightSide">
+                <div class="upperInput">
+                    <input type="text" class="inputText" id="wordsInput" placeholder="лес-бочка-бык-крик-3-Бок">
+                    <button class="processBtn" id="wordsProcess">Разобрать</button>
                 </div>
+                
+                <div class="block1" data-placeholder="Блок 1 (зона перетаскивания)"></div>
             </div>
-        `;
+        </div>
+    `;
+    
+    console.log('Структура приложения создана');
+    
+    // Инициализируем переменные приложения
+    let originalOrder = [];
+    let originalData = {};
+    let selectedWords = new Set();
+    let itemCounter = 0;
+    
+    // Функции приложения
+    function randomColor() {
+        return `hsl(${Math.random()*360},70%,70%)`;
+    }
+    
+    function processWords() {
+        console.log('Обработка слов...');
+        const input = document.getElementById('wordsInput').value.trim();
+        if (!input) {
+            console.log('Ввод пустой');
+            return;
+        }
         
-        // Встраиваем JavaScript логику
-        const scriptContent = `
-            let originalOrder = [];
-            let originalData = {};
-            let selectedWords = new Set();
-            let itemCounter = 0;
-            
-            function randomColor() {
-                return \`hsl(\${Math.random()*360},70%,70%)\`;
-            }
-            
-            function process() {
-                const input = document.getElementById('wordsInputText').value.trim();
-                if (!input) return;
-                
-                let parts = input.split('-');
-                
-                let lettersLower = parts.filter(w => /^([а-яa-z]).*/i.test(w) && w[0] === w[0].toLowerCase()).sort();
-                let lettersUpper = parts.filter(w => /^([А-ЯA-Z]).*/i.test(w) && w[0] === w[0].toUpperCase()).sort();
-                let numbers = parts.filter(w => /^\\d+$/.test(w)).sort((a,b)=>a-b);
-                
-                let final = [];
-                lettersLower.forEach((w,i)=>final.push({key:\`a\${i+1}\`, value:w}));
-                lettersUpper.forEach((w,i)=>final.push({key:\`b\${i+1}\`, value:w}));
-                numbers.forEach((w,i)=>final.push({key:\`n\${i+1}\`, value:w}));
-                
-                originalOrder = final.map(f=>f.value);
-                
-                let block2 = document.querySelector('.words-app-block2');
-                block2.innerHTML = '';
-                itemCounter = 0;
-                
-                final.forEach(obj => {
-                    itemCounter++;
-                    let el = document.createElement('div');
-                    el.className = 'words-app-item';
-                    el.innerText = \`\${obj.key} \${obj.value}\`;
-                    el.dataset.word = obj.value;
-                    el.dataset.key = obj.key;
-                    el.dataset.id = \`item-\${itemCounter}\`;
-                    
-                    let baseColor = "#9fda9f";
-                    el.style.background = baseColor;
-                    
-                    originalData[\`\${obj.value}-\${itemCounter}\`] = {
-                        value: obj.value,
-                        key: obj.key,
-                        color: baseColor
-                    };
-                    
-                    el.draggable = true;
-                    
-                    el.addEventListener('dragstart', dragStart);
-                    el.addEventListener('click', function() {
-                        if (this.parentElement.className === 'words-app-block1') {
-                            addToBlock3(obj.value, this.dataset.id);
-                        }
-                    });
-                    
-                    block2.appendChild(el);
-                });
-                
-                document.querySelector('.words-app-block1').innerHTML = '';
-                selectedWords.clear();
-                updateBlock3();
-            }
-            
-            function addToBlock3(word, itemId) {
-                selectedWords.add(\`\${word}:\${itemId}\`);
-                updateBlock3();
-            }
-            
-            function removeFromBlock3(wordEntry) {
-                selectedWords.delete(wordEntry);
-                updateBlock3();
-            }
-            
-            function updateBlock3() {
-                let b3 = document.querySelector('.words-app-block3');
-                b3.innerHTML = '';
-                
-                selectedWords.forEach(wordEntry => {
-                    const [word, itemId] = wordEntry.split(':');
-                    
-                    let el = document.createElement('div');
-                    el.className = 'words-app-block3-item';
-                    el.innerText = word;
-                    el.dataset.itemId = itemId;
-                    el.style.background = 'transparent';
-                    el.style.border = 'none';
-                    el.style.padding = '6px 10px';
-                    el.style.margin = '2px';
-                    
-                    b3.appendChild(el);
-                });
-                
-                if (selectedWords.size === 0) {
-                    b3.innerHTML = '<div style="color: #666; padding: 10px; font-family: Montserrat, Arial, sans-serif;">Блок 3 (кликните на слова в синем блоке)</div>';
-                }
-            }
-            
-            function dragStart(e) {
-                const fullText = e.target.innerText;
-                const word = fullText.split(' ')[1];
-                
-                e.dataTransfer.setData('text', word);
-                e.dataTransfer.setData('source', e.target.parentElement.className);
-                e.dataTransfer.setData('itemId', e.target.dataset.id);
-                e.dataTransfer.setData('fullText', fullText);
-            }
-            
-            // Назначаем обработчики
-            document.getElementById('wordsProcessBtn').addEventListener('click', process);
-            
-            document.addEventListener('dragover', function(e) {
-                e.preventDefault();
-            });
-            
-            document.addEventListener('dragend', function() {
-                document.querySelectorAll('.words-app-item.dragging').forEach(el => {
-                    el.classList.remove('dragging');
-                });
-            });
-            
-            document.addEventListener('drop', function(e) {
-                e.preventDefault();
-                
-                let word = e.dataTransfer.getData('text');
-                let source = e.dataTransfer.getData('source');
-                let itemId = e.dataTransfer.getData('itemId');
-                let fullText = e.dataTransfer.getData('fullText');
-                
-                let item = document.querySelector(\`.words-app-item[data-id="\${itemId}"]\`);
-                if (!item) return;
-                
-                item.classList.remove('dragging');
-                
-                const block1 = document.querySelector('.words-app-block1');
-                const block2 = document.querySelector('.words-app-block2');
-                
-                const mouseX = e.clientX;
-                const mouseY = e.clientY;
-                
-                const block1Rect = block1.getBoundingClientRect();
-                const block2Rect = block2.getBoundingClientRect();
-                
-                const isOverBlock1 = mouseX >= block1Rect.left && mouseX <= block1Rect.right &&
-                                  mouseY >= block1Rect.top && mouseY <= block2Rect.bottom;
-                
-                const isOverBlock2 = mouseX >= block2Rect.left && mouseX <= block2Rect.right &&
-                                  mouseY >= block2Rect.top && mouseY <= block2Rect.bottom;
-                
-                if (isOverBlock1) {
-                    if (source === 'words-app-block2') {
-                        item.style.background = randomColor();
-                    }
-                    
-                    item.style.position = 'absolute';
-                    item.style.left = \`\${mouseX - block1Rect.left - 40}px\`;
-                    item.style.top = \`\${mouseY - block1Rect.top - 15}px\`;
-                    
-                    block1.appendChild(item);
-                    
-                } else if (isOverBlock2) {
-                    const wordKey = \`\${word}-\${itemId}\`;
-                    if (originalData[wordKey]) {
-                        item.style.background = originalData[wordKey].color || "#9fda9f";
-                    } else {
-                        item.style.background = "#9fda9f";
-                    }
-                    
-                    item.style.position = '';
-                    item.style.left = '';
-                    item.style.top = '';
-                    
-                    let toRemove = null;
-                    selectedWords.forEach(entry => {
-                        if (entry.includes(\`:\${itemId}\`)) {
-                            toRemove = entry;
-                        }
-                    });
-                    if (toRemove) {
-                        removeFromBlock3(toRemove);
-                    }
-                    
-                    let index = -1;
-                    for (let i = 0; i < originalOrder.length; i++) {
-                        if (originalOrder[i] === word) {
-                            index = i;
-                            break;
-                        }
-                    }
-                    
-                    if (index !== -1) {
-                        let block2Items = [...block2.querySelectorAll('.words-app-item')];
-                        
-                        let sortedItems = block2Items.sort((a, b) => {
-                            let aKey = a.dataset.key;
-                            let bKey = b.dataset.key;
-                            
-                            if (aKey[0] !== bKey[0]) {
-                                return aKey[0].localeCompare(bKey[0]);
-                            }
-                            return parseInt(aKey.slice(1)) - parseInt(bKey.slice(1));
-                        });
-                        
-                        block2.innerHTML = '';
-                        
-                        let allItems = [...sortedItems];
-                        if (!sortedItems.find(el => el.dataset.id === itemId)) {
-                            allItems.push(item);
-                        }
-                        
-                        allItems.sort((a, b) => {
-                            let aKey = a.dataset.key;
-                            let bKey = b.dataset.key;
-                            
-                            if (aKey[0] !== bKey[0]) {
-                                return aKey[0].localeCompare(bKey[0]);
-                            }
-                            return parseInt(aKey.slice(1)) - parseInt(bKey.slice(1));
-                        });
-                        
-                        allItems.forEach(el => {
-                            block2.appendChild(el);
-                        });
-                        
-                    } else {
-                        block2.appendChild(item);
-                    }
-                }
-            });
-            
-            document.addEventListener('dragstart', function(e) {
-                if (e.target.classList.contains('words-app-item')) {
-                    e.target.classList.add('dragging');
-                }
-            });
-            
-            // Обработка Enter в поле ввода
-            document.getElementById('wordsInputText').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    process();
-                }
-            });
-        `;
+        console.log('Ввод:', input);
+        let parts = input.split('-');
+        console.log('Части:', parts);
         
-        // Создаем и выполняем скрипт
-        const script = document.createElement('script');
-        script.textContent = scriptContent;
-        document.head.appendChild(script);
+        let lettersLower = parts.filter(w => /^([а-яa-z]).*/i.test(w) && w[0] === w[0].toLowerCase()).sort();
+        let lettersUpper = parts.filter(w => /^([А-ЯA-Z]).*/i.test(w) && w[0] === w[0].toUpperCase()).sort();
+        let numbers = parts.filter(w => /^\d+$/.test(w)).sort((a,b)=>parseInt(a)-parseInt(b));
+        
+        console.log('Строчные:', lettersLower);
+        console.log('Заглавные:', lettersUpper);
+        console.log('Числа:', numbers);
+        
+        let final = [];
+        lettersLower.forEach((w,i)=>final.push({key:`a${i+1}`, value:w}));
+        lettersUpper.forEach((w,i)=>final.push({key:`b${i+1}`, value:w}));
+        numbers.forEach((w,i)=>final.push({key:`n${i+1}`, value:w}));
+        
+        originalOrder = final.map(f=>f.value);
+        console.log('Итоговый порядок:', originalOrder);
+        
+        let block2 = document.querySelector('#wordsApp .block2');
+        block2.innerHTML = '';
+        itemCounter = 0;
+        originalData = {};
+        
+        final.forEach(obj => {
+            itemCounter++;
+            let el = document.createElement('div');
+            el.className = 'item';
+            el.innerText = `${obj.key} ${obj.value}`;
+            el.dataset.word = obj.value;
+            el.dataset.key = obj.key;
+            el.dataset.id = `item-${itemCounter}`;
+            
+            let baseColor = "#9fda9f";
+            el.style.background = baseColor;
+            
+            originalData[`${obj.value}-${itemCounter}`] = {
+                value: obj.value,
+                key: obj.key,
+                color: baseColor
+            };
+            
+            el.draggable = true;
+            
+            // Обработчики событий
+            el.addEventListener('dragstart', handleDragStart);
+            el.addEventListener('click', function() {
+                console.log('Клик по элементу:', obj.value);
+                if (this.parentElement.classList.contains('block1')) {
+                    addToBlock3(obj.value, this.dataset.id);
+                }
+            });
+            
+            block2.appendChild(el);
+        });
+        
+        document.querySelector('#wordsApp .block1').innerHTML = '';
+        selectedWords.clear();
+        updateBlock3();
+        
+        console.log('Обработка завершена, создано элементов:', itemCounter);
+    }
+    
+    function addToBlock3(word, itemId) {
+        console.log('Добавление в блок 3:', word, itemId);
+        selectedWords.add(`${word}:${itemId}`);
+        updateBlock3();
+    }
+    
+    function removeFromBlock3(wordEntry) {
+        console.log('Удаление из блока 3:', wordEntry);
+        selectedWords.delete(wordEntry);
+        updateBlock3();
+    }
+    
+    function updateBlock3() {
+        console.log('Обновление блока 3, элементов:', selectedWords.size);
+        let b3 = document.querySelector('#wordsApp .block3');
+        if (!b3) {
+            console.error('Не найден блок 3');
+            return;
+        }
+        
+        b3.innerHTML = '';
+        
+        selectedWords.forEach(wordEntry => {
+            const [word, itemId] = wordEntry.split(':');
+            
+            let el = document.createElement('div');
+            el.className = 'block3-item';
+            el.innerText = word;
+            el.dataset.itemId = itemId;
+            
+            b3.appendChild(el);
+        });
+        
+        if (selectedWords.size === 0) {
+            b3.innerHTML = '<div style="color: #666; padding: 10px; font-family: Montserrat, Arial, sans-serif;">Блок 3 (кликните на слова в синем блоке)</div>';
+        }
+        
+        console.log('Блок 3 обновлен');
+    }
+    
+    function handleDragStart(e) {
+        console.log('Начало перетаскивания');
+        const fullText = e.target.innerText;
+        const word = fullText.split(' ')[1] || fullText;
+        
+        e.dataTransfer.setData('text', word);
+        e.dataTransfer.setData('source', e.target.parentElement.className);
+        e.dataTransfer.setData('itemId', e.target.dataset.id);
+        e.dataTransfer.setData('fullText', fullText);
+        
+        e.target.classList.add('dragging');
+    }
+    
+    // Глобальные обработчики событий
+    document.getElementById('wordsProcess').addEventListener('click', processWords);
+    
+    // Обработка Enter в поле ввода
+    document.getElementById('wordsInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            processWords();
+        }
     });
+    
+    // Обработчики drag & drop
+    document.addEventListener('dragover', function(e) {
+        e.preventDefault();
+    });
+    
+    document.addEventListener('dragend', function(e) {
+        console.log('Завершение перетаскивания');
+        document.querySelectorAll('#wordsApp .item.dragging').forEach(el => {
+            el.classList.remove('dragging');
+        });
+    });
+    
+    document.addEventListener('drop', function(e) {
+        e.preventDefault();
+        console.log('Drop событие');
+        
+        let word = e.dataTransfer.getData('text');
+        let source = e.dataTransfer.getData('source');
+        let itemId = e.dataTransfer.getData('itemId');
+        
+        console.log('Данные:', {word, source, itemId});
+        
+        let item = document.querySelector(`#wordsApp .item[data-id="${itemId}"]`);
+        if (!item) {
+            console.error('Элемент не найден:', itemId);
+            return;
+        }
+        
+        item.classList.remove('dragging');
+        
+        const block1 = document.querySelector('#wordsApp .block1');
+        const block2 = document.querySelector('#wordsApp .block2');
+        
+        if (!block1 || !block2) {
+            console.error('Блоки не найдены');
+            return;
+        }
+        
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        
+        const block1Rect = block1.getBoundingClientRect();
+        const block2Rect = block2.getBoundingClientRect();
+        
+        const isOverBlock1 = mouseX >= block1Rect.left && mouseX <= block1Rect.right &&
+                            mouseY >= block1Rect.top && mouseY <= block1Rect.bottom;
+        
+        const isOverBlock2 = mouseX >= block2Rect.left && mouseX <= block2Rect.right &&
+                            mouseY >= block2Rect.top && mouseY <= block2Rect.bottom;
+        
+        console.log('Координаты:', {mouseX, mouseY});
+        console.log('Block1 rect:', block1Rect);
+        console.log('Block2 rect:', block2Rect);
+        console.log('Over Block1:', isOverBlock1);
+        console.log('Over Block2:', isOverBlock2);
+        
+        if (isOverBlock1) {
+            console.log('Перемещение в Block1');
+            if (source.includes('block2')) {
+                item.style.background = randomColor();
+            }
+            
+            item.style.position = 'absolute';
+            item.style.left = `${mouseX - block1Rect.left - 40}px`;
+            item.style.top = `${mouseY - block1Rect.top - 15}px`;
+            
+            block1.appendChild(item);
+            
+        } else if (isOverBlock2) {
+            console.log('Возвращение в Block2');
+            const wordKey = `${word}-${itemId}`;
+            if (originalData[wordKey]) {
+                item.style.background = originalData[wordKey].color || "#9fda9f";
+            } else {
+                item.style.background = "#9fda9f";
+            }
+            
+            item.style.position = '';
+            item.style.left = '';
+            item.style.top = '';
+            
+            // Удаляем из блока 3 если есть
+            let toRemove = null;
+            selectedWords.forEach(entry => {
+                if (entry.includes(`:${itemId}`)) {
+                    toRemove = entry;
+                }
+            });
+            if (toRemove) {
+                removeFromBlock3(toRemove);
+            }
+            
+            // Восстанавливаем сортировку
+            let block2Items = [...block2.querySelectorAll('.item')];
+            
+            let sortedItems = block2Items.sort((a, b) => {
+                let aKey = a.dataset.key;
+                let bKey = b.dataset.key;
+                
+                if (aKey[0] !== bKey[0]) {
+                    return aKey[0].localeCompare(bKey[0]);
+                }
+                return parseInt(aKey.slice(1)) - parseInt(bKey.slice(1));
+            });
+            
+            block2.innerHTML = '';
+            
+            let allItems = [...sortedItems];
+            if (!sortedItems.find(el => el.dataset.id === itemId)) {
+                allItems.push(item);
+            }
+            
+            allItems.sort((a, b) => {
+                let aKey = a.dataset.key;
+                let bKey = b.dataset.key;
+                
+                if (aKey[0] !== bKey[0]) {
+                    return aKey[0].localeCompare(bKey[0]);
+                }
+                return parseInt(aKey.slice(1)) - parseInt(bKey.slice(1));
+            });
+            
+            allItems.forEach(el => {
+                block2.appendChild(el);
+            });
+        }
+        
+        console.log('Drop завершен');
+    });
+    
+    // Тестовые данные для демонстрации
+    console.log('Инициализация завершена');
+    
+    // Автозаполнение тестовыми данными для демонстрации
+    setTimeout(() => {
+        document.getElementById('wordsInput').value = 'лес-бочка-бык-крик-3-Бок';
+        processWords();
+    }, 100);
+});
 </script>
