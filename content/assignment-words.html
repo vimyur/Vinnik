@@ -180,7 +180,7 @@
                             <div id="rightSide">
                                 <div id="upperInput">
                                     <input type="text" id="inputText" placeholder="лес-бочка-бык-крик-3-Бок">
-                                    <button id="processBtn" onclick="processWords()">Разобрать</button>
+                                    <button id="processBtn">Разобрать</button>
                                 </div>
                                 
                                 <div id="block1">Блок 1 (синий — зона перетаскивания)</div>
@@ -191,20 +191,20 @@
                 </div>
                 
                 <script>
-                     // Создаем объект для хранения данных
+                    // Создаем объект для хранения данных
                     let wordsApp = {
                         originalOrder: [],
                         originalData: {},
                         selectedWords: new Set(),
                         itemCounter: 0
                     };
-                
+
                     function randomColor() {
                         return `hsl(${Math.random()*360},70%,70%)`;
                     }
-                
-                    // Основная функция обработки
-                    function processWords() {
+
+                    // Основная функция обработки - делаем глобальной
+                    window.processWords = function() {
                         console.log('processWords вызвана!');
                         
                         const input = document.getElementById('inputText');
@@ -220,24 +220,24 @@
                         }
                         
                         console.log('Обрабатываем:', value);
-                
+
                         // Разбиваем на части
                         let parts = value.split('-');
-                
+
                         // Сортируем по категориям
                         let lettersLower = parts.filter(w => /^([а-яa-z]).*/i.test(w) && w[0] === w[0].toLowerCase()).sort();
                         let lettersUpper = parts.filter(w => /^([А-ЯA-Z]).*/i.test(w) && w[0] === w[0].toUpperCase()).sort();
                         let numbers = parts.filter(w => /^\d+$/.test(w)).sort((a,b)=>a-b);
-                
+
                         // Создаем финальный массив
                         let final = [];
                         lettersLower.forEach((w,i)=>final.push({key:`a${i+1}`, value:w}));
                         lettersUpper.forEach((w,i)=>final.push({key:`b${i+1}`, value:w}));
                         numbers.forEach((w,i)=>final.push({key:`n${i+1}`, value:w}));
-                
+
                         // Сохраняем оригинальный порядок
                         wordsApp.originalOrder = final.map(f=>f.value);
-                
+
                         // Очищаем и заполняем блок 2
                         let block2 = document.getElementById('block2');
                         if (!block2) {
@@ -247,7 +247,7 @@
                         
                         block2.innerHTML = '';
                         wordsApp.itemCounter = 0;
-                
+
                         final.forEach(obj => {
                             wordsApp.itemCounter++;
                             
@@ -258,11 +258,11 @@
                             el.dataset.word = obj.value;
                             el.dataset.key = obj.key;
                             el.dataset.id = `item-${wordsApp.itemCounter}`;
-                
+
                             // Устанавливаем цвет
                             let baseColor = "#9fda9f";
                             el.style.background = baseColor;
-                
+
                             // Сохраняем данные
                             wordsApp.originalData[`${obj.value}-${wordsApp.itemCounter}`] = {
                                 value: obj.value,
@@ -272,7 +272,7 @@
                             
                             // Делаем перетаскиваемым
                             el.draggable = true;
-                
+
                             // Добавляем обработчики
                             el.addEventListener('dragstart', function(e) {
                                 e.dataTransfer.setData('text', obj.value);
@@ -280,7 +280,7 @@
                                 e.dataTransfer.setData('itemId', el.dataset.id);
                                 this.classList.add('dragging');
                             });
-                
+
                             el.addEventListener('click', function() {
                                 // Клик работает только в блоке 1
                                 if (this.parentElement && this.parentElement.id === 'block1') {
@@ -288,11 +288,11 @@
                                     updateBlock3();
                                 }
                             });
-                
+
                             // Добавляем в блок 2
                             block2.appendChild(el);
                         });
-                
+
                         // Очищаем блок 1 и блок 3
                         let block1 = document.getElementById('block1');
                         if (block1) block1.innerHTML = '';
@@ -305,8 +305,8 @@
                         wordsApp.selectedWords.clear();
                         
                         console.log('Готово! Создано элементов:', final.length);
-                    }
-                
+                    };
+
                     // Обновление блока 3
                     function updateBlock3() {
                         let b3 = document.getElementById('block3');
@@ -321,7 +321,7 @@
                             b3.appendChild(el);
                         });
                     }
-                
+
                     // Инициализация после загрузки страницы
                     function initWordsAssignment() {
                         console.log('Инициализация задания со словами...');
@@ -330,6 +330,9 @@
                         const processBtn = document.getElementById('processBtn');
                         if (processBtn) {
                             console.log('Кнопка найдена, добавляем обработчик');
+                            // Удаляем старый onclick если есть
+                            processBtn.removeAttribute('onclick');
+                            // Добавляем новый обработчик
                             processBtn.addEventListener('click', processWords);
                         } else {
                             console.error('Кнопка "Разобрать" не найдена!');
@@ -338,19 +341,19 @@
                         // Назначаем обработчики для перетаскивания
                         setupDragAndDrop();
                     }
-                
+
                     // Настройка Drag & Drop
                     function setupDragAndDrop() {
                         document.addEventListener('dragover', function(e) {
                             e.preventDefault();
                         });
-                
+
                         document.addEventListener('dragend', function() {
                             document.querySelectorAll('.item.dragging').forEach(el => {
                                 el.classList.remove('dragging');
                             });
                         });
-                
+
                         document.addEventListener('drop', function(e) {
                             e.preventDefault();
                             
@@ -360,14 +363,14 @@
                             
                             let item = document.querySelector(`.item[data-id="${itemId}"]`);
                             if (!item) return;
-                
+
                             item.classList.remove('dragging');
                             
                             const block1 = document.getElementById('block1');
                             const block2 = document.getElementById('block2');
                             
                             if (!block1 || !block2) return;
-                
+
                             const mouseX = e.clientX;
                             const mouseY = e.clientY;
                             
@@ -474,14 +477,14 @@
                                 }
                             }
                         });
-                
+
                         document.addEventListener('dragstart', function(e) {
                             if (e.target.classList.contains('item')) {
                                 e.target.classList.add('dragging');
                             }
                         });
                     }
-                
+
                     // Запускаем инициализацию
                     // Пытаемся несколько раз с разными задержками
                     initWordsAssignment();
@@ -490,8 +493,6 @@
                     setTimeout(initWordsAssignment, 1000);
                 </script>
             </div>
-
-        
 
             <div class="hero-actions" style="justify-content: center; margin-top: 3rem;">
                 <button class="btn btn-secondary" data-page="assignment-flexbox">
