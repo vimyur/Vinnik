@@ -1,255 +1,463 @@
-<script>
-    // Объявляем переменные в глобальной области видимости
-    window.wordsApp = {
-        originalOrder: [],
-        originalData: {},
-        selectedWords: new Set(),
-        itemCounter: 0
-    };
-    
-    function randomColor() {
-        return `hsl(${Math.random()*360},70%,70%)`;
-    }
+<div class="page assignment-page active">
 
-    function processWords() {
-        const input = document.getElementById('inputText').value.trim();
-        if (!input) return;
-
-        let parts = input.split('-');
-
-        let lettersLower = parts.filter(w => /^([а-яa-z]).*/i.test(w) && w[0] === w[0].toLowerCase()).sort();
-        let lettersUpper = parts.filter(w => /^([А-ЯA-Z]).*/i.test(w) && w[0] === w[0].toUpperCase()).sort();
-        let numbers = parts.filter(w => /^\d+$/.test(w)).sort((a,b)=>a-b);
-
-        let final = [];
-        lettersLower.forEach((w,i)=>final.push({key:`a${i+1}`, value:w}));
-        lettersUpper.forEach((w,i)=>final.push({key:`b${i+1}`, value:w}));
-        numbers.forEach((w,i)=>final.push({key:`n${i+1}`, value:w}));
-
-        window.wordsApp.originalOrder = final.map(f=>f.value);
-
-        let block2 = document.getElementById('block2');
-        block2.innerHTML = '';
-        window.wordsApp.itemCounter = 0;
-
-        final.forEach(obj => {
-            window.wordsApp.itemCounter++;
-            let el = document.createElement('div');
-            el.className = 'item';
-            el.innerText = `${obj.key} ${obj.value}`;
-            el.dataset.word = obj.value;
-            el.dataset.key = obj.key;
-            el.dataset.id = `item-${window.wordsApp.itemCounter}`;
-
-            let baseColor = "#9fda9f";
-            el.style.background = baseColor;
-
-            window.wordsApp.originalData[`${obj.value}-${window.wordsApp.itemCounter}`] = {
-                value: obj.value,
-                key: obj.key,
-                color: baseColor
-            };
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Сортировка и перетаскивание слов</h2>
+                <p>Интерактивная система с категоризацией и Drag & Drop</p>
+            </div>
             
-            el.draggable = true;
-
-            el.addEventListener('dragstart', dragStart);
-            el.addEventListener('click', function() {
-                if (this.parentElement.id === 'block1') {
-                    addToBlock3(obj.value, this.dataset.id);
-                }
-            });
-
-            block2.appendChild(el);
-        });
-        
-        document.getElementById('block1').innerHTML = '';
-        window.wordsApp.selectedWords.clear();
-        updateBlock3();
-    }
-
-    function addToBlock3(word, itemId) {
-        window.wordsApp.selectedWords.add(`${word}:${itemId}`);
-        updateBlock3();
-    }
-
-    function removeFromBlock3(wordEntry) {
-        window.wordsApp.selectedWords.delete(wordEntry);
-        updateBlock3();
-    }
-
-    function updateBlock3() {
-        let b3 = document.getElementById('block3');
-        b3.innerHTML = '';
-        
-        window.wordsApp.selectedWords.forEach(wordEntry => {
-            const [word, itemId] = wordEntry.split(':');
-            
-            let el = document.createElement('div');
-            el.className = 'block3-item';
-            el.innerText = word;
-            el.dataset.itemId = itemId;
-            
-            el.style.background = 'transparent';
-            el.style.border = 'none';
-            el.style.padding = '6px 10px';
-            el.style.margin = '2px';
-            
-            b3.appendChild(el);
-        });
-        
-        if (window.wordsApp.selectedWords.size === 0) {
-            b3.innerHTML = '<div style="color: #666; padding: 10px; font-family: Montserrat, Arial, sans-serif;">Блок 3 (кликните на слова в синем блоке)</div>';
-        }
-    }
-
-    function dragStart(e) {
-        const fullText = e.target.innerText;
-        const word = fullText.split(' ')[1];
-        
-        e.dataTransfer.setData('text', word);
-        e.dataTransfer.setData('source', e.target.parentElement.id);
-        e.dataTransfer.setData('itemId', e.target.dataset.id);
-        e.dataTransfer.setData('fullText', fullText);
-    }
-
-    // Инициализация сразу при загрузке скрипта
-    function initWordsAssignment() {
-        // Назначаем обработчик кнопке
-        const processBtn = document.getElementById('processBtn');
-        if (processBtn) {
-            processBtn.addEventListener('click', processWords);
-        }
-        
-        // Назначаем обработчики событий перетаскивания
-        document.addEventListener('dragover', function(e) {
-            e.preventDefault();
-        });
-
-        document.addEventListener('dragend', function() {
-            document.querySelectorAll('.item.dragging').forEach(el => {
-                el.classList.remove('dragging');
-            });
-        });
-
-        document.addEventListener('drop', function(e) {
-            e.preventDefault();
-            
-            let word = e.dataTransfer.getData('text');
-            let source = e.dataTransfer.getData('source');
-            let itemId = e.dataTransfer.getData('itemId');
-            let fullText = e.dataTransfer.getData('fullText');
-            
-            let item = document.querySelector(`.item[data-id="${itemId}"]`);
-            if (!item) return;
-
-            item.classList.remove('dragging');
-            
-            const block1 = document.getElementById('block1');
-            const block2 = document.getElementById('block2');
-            
-            const mouseX = e.clientX;
-            const mouseY = e.clientY;
-            
-            const block1Rect = block1.getBoundingClientRect();
-            const block2Rect = block2.getBoundingClientRect();
-            
-            const isOverBlock1 = mouseX >= block1Rect.left && mouseX <= block1Rect.right &&
-                                mouseY >= block1Rect.top && mouseY <= block1Rect.bottom;
-            
-            const isOverBlock2 = mouseX >= block2Rect.left && mouseX <= block2Rect.right &&
-                                mouseY >= block2Rect.top && mouseY <= block2Rect.bottom;
-            
-            if (isOverBlock1) {
-                if (source === 'block2') {
-                    item.style.background = randomColor();
-                }
-                
-                item.style.position = 'absolute';
-                item.style.left = `${mouseX - block1Rect.left - 40}px`;
-                item.style.top = `${mouseY - block1Rect.top - 15}px`;
-                
-                block1.appendChild(item);
-                
-            } else if (isOverBlock2) {
-                const wordKey = `${word}-${itemId}`;
-                if (window.wordsApp.originalData[wordKey]) {
-                    item.style.background = window.wordsApp.originalData[wordKey].color || "#9fda9f";
-                } else {
-                    item.style.background = "#9fda9f";
-                }
-                
-                item.style.position = '';
-                item.style.left = '';
-                item.style.top = '';
-                
-                let toRemove = null;
-                window.wordsApp.selectedWords.forEach(entry => {
-                    if (entry.includes(`:${itemId}`)) {
-                        toRemove = entry;
+            <!-- Встраиваем задание со словами -->
+            <div class="assignment-content">
+                <style>
+                    .words-assignment-container {
+                        background: var(--color-white);
+                        padding: 2rem;
+                        border-radius: var(--radius-2xl);
+                        margin: 2rem auto;
+                        max-width: 1200px;
+                        box-shadow: var(--shadow-lg);
+                        border: 2px solid var(--color-green);
                     }
-                });
-                if (toRemove) {
-                    removeFromBlock3(toRemove);
-                }
-                
-                let index = -1;
-                for (let i = 0; i < window.wordsApp.originalOrder.length; i++) {
-                    if (window.wordsApp.originalOrder[i] === word) {
-                        index = i;
-                        break;
-                    }
-                }
-                
-                if (index !== -1) {
-                    let block2Items = [...block2.querySelectorAll('.item')];
                     
-                    let sortedItems = block2Items.sort((a, b) => {
-                        let aKey = a.dataset.key;
-                        let bKey = b.dataset.key;
+                    .words-assignment-container h3 {
+                        color: var(--color-green);
+                        margin-bottom: 1rem;
+                        text-align: center;
+                        font-family: var(--font-accent);
+                        font-size: 1.5rem;
+                    }
+                    
+                    /* Подключаем Montserrat */
+                    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+                    
+                    /* Стили для задания со словами */
+                    .words-body {
+                        font-family: 'Montserrat', Arial, sans-serif;
+                        margin: 0;
+                        padding: 20px;
+                        background: #f7f7f7;
+                        border-radius: var(--radius-xl);
+                    }
+
+                    #block3 {
+                        width: 100%;
+                        height: 120px;
+                        border: 2px solid red;
+                        margin-bottom: 20px;
+                        background: #ffe5e5;
+                        padding: 10px;
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 5px;
+                        align-items: flex-start;
+                        box-sizing: border-box;
+                        overflow-y: auto;
+                        border-radius: var(--radius-lg);
+                        font-family: 'Montserrat', Arial, sans-serif;
+                    }
+
+                    #layout {
+                        display: flex;
+                        gap: 20px;
+                        width: 100%;
+                        height: 500px;
+                    }
+
+                    #block2 {
+                        width: 30%;
+                        border: 2px solid #000;
+                        background: #ffffff;
+                        padding: 10px;
+                        overflow-y: auto;
+                        box-sizing: border-box;
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-content: flex-start;
+                        gap: 5px;
+                        border-radius: var(--radius-lg);
+                        font-family: 'Montserrat', Arial, sans-serif;
+                    }
+
+                    #rightSide {
+                        width: 70%;
+                        display: flex;
+                        flex-direction: column;
+                        box-sizing: border-box;
+                    }
+
+                    #upperInput {
+                        display: flex;
+                        gap: 10px;
+                        margin-bottom: 10px;
+                        width: 100%;
+                        box-sizing: border-box;
+                    }
+
+                    #inputText {
+                        flex-grow: 1;
+                        height: 40px;
+                        padding: 4px 12px;
+                        font-size: 14px;
+                        box-sizing: border-box;
+                        border: 2px solid var(--color-green);
+                        border-radius: var(--radius);
+                        font-family: 'Montserrat', Arial, sans-serif;
+                    }
+
+                    #processBtn {
+                        height: 40px;
+                        padding: 0 20px;
+                        font-size: 14px;
+                        cursor: pointer;
+                        background-color: var(--color-green);
+                        color: white;
+                        border: none;
+                        border-radius: var(--radius);
+                        font-family: 'Montserrat', Arial, sans-serif;
+                        font-weight: 500;
+                        transition: background-color 0.2s;
+                    }
+
+                    #processBtn:hover {
+                        background-color: #8aab72;
+                    }
+
+                    #block1 {
+                        flex-grow: 1;
+                        border: 2px solid blue;
+                        background: #e8f0ff;
+                        padding: 10px;
+                        box-sizing: border-box;
+                        overflow-y: auto;
+                        min-height: 300px;
+                        position: relative;
+                        border-radius: var(--radius-lg);
+                        font-family: 'Montserrat', Arial, sans-serif;
+                    }
+
+                    .item {
+                        padding: 8px 16px;
+                        background: #9fda9f;
+                        cursor: grab;
+                        user-select: none;
+                        border-radius: 20px 4px 4px 20px;
+                        transition: transform 0.2s;
+                        font-size: 14px;
+                        height: fit-content;
+                        font-family: 'Montserrat', Arial, sans-serif;
+                        font-weight: 500;
+                        border: 1px solid rgba(0,0,0,0.1);
+                    }
+
+                    .item:hover {
+                        transform: scale(1.05);
+                        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                    }
+
+                    .item.dragging {
+                        opacity: 0.5;
+                    }
+
+                    .block3-item {
+                        cursor: default;
+                        font-family: 'Montserrat', Arial, sans-serif;
+                        font-weight: 500;
+                        background: transparent !important;
+                        border: none !important;
+                        padding: 6px 10px;
+                        margin: 2px;
+                        display: inline-block;
+                        font-size: 14px;
+                    }
+                </style>
+                
+                <div class="words-assignment-container">
+                    <h3>Система сортировки слов</h3>
+                    <div class="words-body">
+                        <div id="block3">Блок 3 (кликните на слова в синем блоке)</div>
                         
-                        if (aKey[0] !== bKey[0]) {
-                            return aKey[0].localeCompare(bKey[0]);
-                        }
-                        return parseInt(aKey.slice(1)) - parseInt(bKey.slice(1));
-                    });
+                        <div id="layout">
+                            <div id="block2">Блок 2 (исходные элементы)</div>
+                            
+                            <div id="rightSide">
+                                <div id="upperInput">
+                                    <input type="text" id="inputText" placeholder="лес-бочка-бык-крик-3-Бок">
+                                    <button id="processBtn">Разобрать</button>
+                                </div>
+                                
+                                <div id="block1">Блок 1 (синий — зона перетаскивания)</div>
+                            </div>
+                        </div>
+                    </div>
+            
+                </div>
+                
+                <!-- JavaScript код выносим в отдельный блок и запускаем после загрузки DOM -->
+                <script>
+                    // Объявляем переменные в глобальной области видимости
+                    window.wordsApp = {
+                        originalOrder: [],
+                        originalData: {},
+                        selectedWords: new Set(),
+                        itemCounter: 0
+                    };
                     
-                    block2.innerHTML = '';
-                    
-                    let allItems = [...sortedItems];
-                    if (!sortedItems.find(el => el.dataset.id === itemId)) {
-                        allItems.push(item);
+                    function randomColor() {
+                        return `hsl(${Math.random()*360},70%,70%)`;
                     }
-                    
-                    allItems.sort((a, b) => {
-                        let aKey = a.dataset.key;
-                        let bKey = b.dataset.key;
-                        
-                        if (aKey[0] !== bKey[0]) {
-                            return aKey[0].localeCompare(bKey[0]);
-                        }
-                        return parseInt(aKey.slice(1)) - parseInt(bKey.slice(1));
-                    });
-                    
-                    allItems.forEach(el => {
-                        block2.appendChild(el);
-                    });
-                    
-                } else {
-                    block2.appendChild(item);
-                }
-            }
-        });
 
-        document.addEventListener('dragstart', function(e) {
-            if (e.target.classList.contains('item')) {
-                e.target.classList.add('dragging');
-            }
-        });
-    }
-    
-    // Запускаем инициализацию после небольшой задержки, чтобы DOM точно был готов
-    setTimeout(initWordsAssignment, 100);
-    
-    // Делаем функцию глобальной
-    window.processWords = processWords;
-</script>
+                    function processWords() {
+                        const input = document.getElementById('inputText').value.trim();
+                        if (!input) return;
+
+                        let parts = input.split('-');
+
+                        let lettersLower = parts.filter(w => /^([а-яa-z]).*/i.test(w) && w[0] === w[0].toLowerCase()).sort();
+                        let lettersUpper = parts.filter(w => /^([А-ЯA-Z]).*/i.test(w) && w[0] === w[0].toUpperCase()).sort();
+                        let numbers = parts.filter(w => /^\d+$/.test(w)).sort((a,b)=>a-b);
+
+                        let final = [];
+                        lettersLower.forEach((w,i)=>final.push({key:`a${i+1}`, value:w}));
+                        lettersUpper.forEach((w,i)=>final.push({key:`b${i+1}`, value:w}));
+                        numbers.forEach((w,i)=>final.push({key:`n${i+1}`, value:w}));
+
+                        window.wordsApp.originalOrder = final.map(f=>f.value);
+
+                        let block2 = document.getElementById('block2');
+                        block2.innerHTML = '';
+                        window.wordsApp.itemCounter = 0;
+
+                        final.forEach(obj => {
+                            window.wordsApp.itemCounter++;
+                            let el = document.createElement('div');
+                            el.className = 'item';
+                            el.innerText = `${obj.key} ${obj.value}`;
+                            el.dataset.word = obj.value;
+                            el.dataset.key = obj.key;
+                            el.dataset.id = `item-${window.wordsApp.itemCounter}`;
+
+                            let baseColor = "#9fda9f";
+                            el.style.background = baseColor;
+
+                            window.wordsApp.originalData[`${obj.value}-${window.wordsApp.itemCounter}`] = {
+                                value: obj.value,
+                                key: obj.key,
+                                color: baseColor
+                            };
+                            
+                            el.draggable = true;
+
+                            el.addEventListener('dragstart', dragStart);
+                            el.addEventListener('click', function() {
+                                if (this.parentElement.id === 'block1') {
+                                    addToBlock3(obj.value, this.dataset.id);
+                                }
+                            });
+
+                            block2.appendChild(el);
+                        });
+                        
+                        document.getElementById('block1').innerHTML = '';
+                        window.wordsApp.selectedWords.clear();
+                        updateBlock3();
+                    }
+
+                    function addToBlock3(word, itemId) {
+                        window.wordsApp.selectedWords.add(`${word}:${itemId}`);
+                        updateBlock3();
+                    }
+
+                    function removeFromBlock3(wordEntry) {
+                        window.wordsApp.selectedWords.delete(wordEntry);
+                        updateBlock3();
+                    }
+
+                    function updateBlock3() {
+                        let b3 = document.getElementById('block3');
+                        b3.innerHTML = '';
+                        
+                        window.wordsApp.selectedWords.forEach(wordEntry => {
+                            const [word, itemId] = wordEntry.split(':');
+                            
+                            let el = document.createElement('div');
+                            el.className = 'block3-item';
+                            el.innerText = word;
+                            el.dataset.itemId = itemId;
+                            
+                            el.style.background = 'transparent';
+                            el.style.border = 'none';
+                            el.style.padding = '6px 10px';
+                            el.style.margin = '2px';
+                            
+                            b3.appendChild(el);
+                        });
+                        
+                        if (window.wordsApp.selectedWords.size === 0) {
+                            b3.innerHTML = '<div style="color: #666; padding: 10px; font-family: Montserrat, Arial, sans-serif;">Блок 3 (кликните на слова в синем блоке)</div>';
+                        }
+                    }
+
+                    function dragStart(e) {
+                        const fullText = e.target.innerText;
+                        const word = fullText.split(' ')[1];
+                        
+                        e.dataTransfer.setData('text', word);
+                        e.dataTransfer.setData('source', e.target.parentElement.id);
+                        e.dataTransfer.setData('itemId', e.target.dataset.id);
+                        e.dataTransfer.setData('fullText', fullText);
+                    }
+
+                    // Инициализация после загрузки DOM
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // Назначаем обработчик кнопке
+                        const processBtn = document.getElementById('processBtn');
+                        if (processBtn) {
+                            processBtn.addEventListener('click', processWords);
+                        }
+                        
+                        // Назначаем обработчики событий перетаскивания
+                        document.addEventListener('dragover', function(e) {
+                            e.preventDefault();
+                        });
+
+                        document.addEventListener('dragend', function() {
+                            document.querySelectorAll('.item.dragging').forEach(el => {
+                                el.classList.remove('dragging');
+                            });
+                        });
+
+                        document.addEventListener('drop', function(e) {
+                            e.preventDefault();
+                            
+                            let word = e.dataTransfer.getData('text');
+                            let source = e.dataTransfer.getData('source');
+                            let itemId = e.dataTransfer.getData('itemId');
+                            let fullText = e.dataTransfer.getData('fullText');
+                            
+                            let item = document.querySelector(`.item[data-id="${itemId}"]`);
+                            if (!item) return;
+
+                            item.classList.remove('dragging');
+                            
+                            const block1 = document.getElementById('block1');
+                            const block2 = document.getElementById('block2');
+                            
+                            const mouseX = e.clientX;
+                            const mouseY = e.clientY;
+                            
+                            const block1Rect = block1.getBoundingClientRect();
+                            const block2Rect = block2.getBoundingClientRect();
+                            
+                            const isOverBlock1 = mouseX >= block1Rect.left && mouseX <= block1Rect.right &&
+                                                mouseY >= block1Rect.top && mouseY <= block1Rect.bottom;
+                            
+                            const isOverBlock2 = mouseX >= block2Rect.left && mouseX <= block2Rect.right &&
+                                                mouseY >= block2Rect.top && mouseY <= block2Rect.bottom;
+                            
+                            if (isOverBlock1) {
+                                if (source === 'block2') {
+                                    item.style.background = randomColor();
+                                }
+                                
+                                item.style.position = 'absolute';
+                                item.style.left = `${mouseX - block1Rect.left - 40}px`;
+                                item.style.top = `${mouseY - block1Rect.top - 15}px`;
+                                
+                                block1.appendChild(item);
+                                
+                            } else if (isOverBlock2) {
+                                const wordKey = `${word}-${itemId}`;
+                                if (window.wordsApp.originalData[wordKey]) {
+                                    item.style.background = window.wordsApp.originalData[wordKey].color || "#9fda9f";
+                                } else {
+                                    item.style.background = "#9fda9f";
+                                }
+                                
+                                item.style.position = '';
+                                item.style.left = '';
+                                item.style.top = '';
+                                
+                                let toRemove = null;
+                                window.wordsApp.selectedWords.forEach(entry => {
+                                    if (entry.includes(`:${itemId}`)) {
+                                        toRemove = entry;
+                                    }
+                                });
+                                if (toRemove) {
+                                    removeFromBlock3(toRemove);
+                                }
+                                
+                                let index = -1;
+                                for (let i = 0; i < window.wordsApp.originalOrder.length; i++) {
+                                    if (window.wordsApp.originalOrder[i] === word) {
+                                        index = i;
+                                        break;
+                                    }
+                                }
+                                
+                                if (index !== -1) {
+                                    let block2Items = [...block2.querySelectorAll('.item')];
+                                    
+                                    let sortedItems = block2Items.sort((a, b) => {
+                                        let aKey = a.dataset.key;
+                                        let bKey = b.dataset.key;
+                                        
+                                        if (aKey[0] !== bKey[0]) {
+                                            return aKey[0].localeCompare(bKey[0]);
+                                        }
+                                        return parseInt(aKey.slice(1)) - parseInt(bKey.slice(1));
+                                    });
+                                    
+                                    block2.innerHTML = '';
+                                    
+                                    let allItems = [...sortedItems];
+                                    if (!sortedItems.find(el => el.dataset.id === itemId)) {
+                                        allItems.push(item);
+                                    }
+                                    
+                                    allItems.sort((a, b) => {
+                                        let aKey = a.dataset.key;
+                                        let bKey = b.dataset.key;
+                                        
+                                        if (aKey[0] !== bKey[0]) {
+                                            return aKey[0].localeCompare(bKey[0]);
+                                        }
+                                        return parseInt(aKey.slice(1)) - parseInt(bKey.slice(1));
+                                    });
+                                    
+                                    allItems.forEach(el => {
+                                        block2.appendChild(el);
+                                    });
+                                    
+                                } else {
+                                    block2.appendChild(item);
+                                }
+                            }
+                        });
+
+                        document.addEventListener('dragstart', function(e) {
+                            if (e.target.classList.contains('item')) {
+                                e.target.classList.add('dragging');
+                            }
+                        });
+                    });
+                    
+                    // Делаем функцию глобальной для вызова из onclick
+                    window.processWords = processWords;
+                </script>
+            </div>
+
+          
+
+            <div class="hero-actions" style="justify-content: center; margin-top: 3rem;">
+                <button class="btn btn-secondary" data-page="assignment-flexbox">
+                    ← К заданию "Flexbox ролик"
+                </button>
+                <button class="btn btn-secondary" data-page="assignment-drawing">
+                    К заданию "Рисунок CSS" →
+                </button>
+            </div>
+        </div>
+    </section>
+</div>
