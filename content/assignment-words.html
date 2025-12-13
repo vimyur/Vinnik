@@ -195,39 +195,38 @@
                 
                 <!-- JavaScript код выносим в отдельный блок и запускаем после загрузки DOM -->
                 <script>
-                    // Объявляем переменные в глобальной области видимости
                     window.wordsApp = {
-                        originalOrder: [],
-                        originalData: {},
-                        selectedWords: new Set(),
-                        itemCounter: 0
+                    originalOrder: [],
+                    originalData: {},
+                    selectedWords: new Set(),
+                    itemCounter: 0
                     };
                     
                     function randomColor() {
                         return `hsl(${Math.random()*360},70%,70%)`;
                     }
-
+                
                     function processWords() {
                         const input = document.getElementById('inputText').value.trim();
                         if (!input) return;
-
+                
                         let parts = input.split('-');
-
+                
                         let lettersLower = parts.filter(w => /^([а-яa-z]).*/i.test(w) && w[0] === w[0].toLowerCase()).sort();
                         let lettersUpper = parts.filter(w => /^([А-ЯA-Z]).*/i.test(w) && w[0] === w[0].toUpperCase()).sort();
                         let numbers = parts.filter(w => /^\d+$/.test(w)).sort((a,b)=>a-b);
-
+                
                         let final = [];
                         lettersLower.forEach((w,i)=>final.push({key:`a${i+1}`, value:w}));
                         lettersUpper.forEach((w,i)=>final.push({key:`b${i+1}`, value:w}));
                         numbers.forEach((w,i)=>final.push({key:`n${i+1}`, value:w}));
-
+                
                         window.wordsApp.originalOrder = final.map(f=>f.value);
-
+                
                         let block2 = document.getElementById('block2');
                         block2.innerHTML = '';
                         window.wordsApp.itemCounter = 0;
-
+                
                         final.forEach(obj => {
                             window.wordsApp.itemCounter++;
                             let el = document.createElement('div');
@@ -236,10 +235,10 @@
                             el.dataset.word = obj.value;
                             el.dataset.key = obj.key;
                             el.dataset.id = `item-${window.wordsApp.itemCounter}`;
-
+                
                             let baseColor = "#9fda9f";
                             el.style.background = baseColor;
-
+                
                             window.wordsApp.originalData[`${obj.value}-${window.wordsApp.itemCounter}`] = {
                                 value: obj.value,
                                 key: obj.key,
@@ -247,14 +246,14 @@
                             };
                             
                             el.draggable = true;
-
+                
                             el.addEventListener('dragstart', dragStart);
                             el.addEventListener('click', function() {
                                 if (this.parentElement.id === 'block1') {
                                     addToBlock3(obj.value, this.dataset.id);
                                 }
                             });
-
+                
                             block2.appendChild(el);
                         });
                         
@@ -262,17 +261,17 @@
                         window.wordsApp.selectedWords.clear();
                         updateBlock3();
                     }
-
+                
                     function addToBlock3(word, itemId) {
                         window.wordsApp.selectedWords.add(`${word}:${itemId}`);
                         updateBlock3();
                     }
-
+                
                     function removeFromBlock3(wordEntry) {
                         window.wordsApp.selectedWords.delete(wordEntry);
                         updateBlock3();
                     }
-
+                
                     function updateBlock3() {
                         let b3 = document.getElementById('block3');
                         b3.innerHTML = '';
@@ -297,7 +296,7 @@
                             b3.innerHTML = '<div style="color: #666; padding: 10px; font-family: Montserrat, Arial, sans-serif;">Блок 3 (кликните на слова в синем блоке)</div>';
                         }
                     }
-
+                
                     function dragStart(e) {
                         const fullText = e.target.innerText;
                         const word = fullText.split(' ')[1];
@@ -307,9 +306,9 @@
                         e.dataTransfer.setData('itemId', e.target.dataset.id);
                         e.dataTransfer.setData('fullText', fullText);
                     }
-
-                    // Инициализация после загрузки DOM
-                    document.addEventListener('DOMContentLoaded', function() {
+                
+                    // Инициализация сразу при загрузке скрипта
+                    function initWordsAssignment() {
                         // Назначаем обработчик кнопке
                         const processBtn = document.getElementById('processBtn');
                         if (processBtn) {
@@ -320,13 +319,13 @@
                         document.addEventListener('dragover', function(e) {
                             e.preventDefault();
                         });
-
+                
                         document.addEventListener('dragend', function() {
                             document.querySelectorAll('.item.dragging').forEach(el => {
                                 el.classList.remove('dragging');
                             });
                         });
-
+                
                         document.addEventListener('drop', function(e) {
                             e.preventDefault();
                             
@@ -337,7 +336,7 @@
                             
                             let item = document.querySelector(`.item[data-id="${itemId}"]`);
                             if (!item) return;
-
+                
                             item.classList.remove('dragging');
                             
                             const block1 = document.getElementById('block1');
@@ -435,15 +434,18 @@
                                 }
                             }
                         });
-
+                
                         document.addEventListener('dragstart', function(e) {
                             if (e.target.classList.contains('item')) {
                                 e.target.classList.add('dragging');
                             }
                         });
-                    });
+                    }
                     
-                    // Делаем функцию глобальной для вызова из onclick
+                    // Запускаем инициализацию после небольшой задержки, чтобы DOM точно был готов
+                    setTimeout(initWordsAssignment, 100);
+                    
+                    // Делаем функцию глобальной
                     window.processWords = processWords;
                 </script>
             </div>
