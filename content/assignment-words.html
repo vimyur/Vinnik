@@ -21,7 +21,7 @@
                 <p>Интерактивное приложение для работы со словами: сортировка, перетаскивание, группировка</p>
             </div>
             
-            <!-- Встраиваем приложение прямо в страницу -->
+            <!-- Встраиваем приложение через iframe для изоляции -->
             <div class="assignment-content">
                 <style>
                     .words-container {
@@ -38,183 +38,201 @@
                         margin-bottom: 1.5rem;
                     }
                     
-                    /* Основные стили приложения */
-                    .words-app {
-                        font-family: 'Montserrat', Arial, sans-serif;
+                    /* Контейнер для iframe */
+                    .iframe-container {
                         width: 100%;
-                        min-height: 600px;
+                        height: 700px;
                         background: white;
                         border-radius: var(--radius-xl);
-                        padding: 2rem;
+                        padding: 0;
                         box-shadow: var(--shadow-md);
                         border: 1px solid var(--color-beige);
-                        display: flex;
-                        flex-direction: column;
+                        overflow: hidden;
                     }
                     
-                    /* Стили блоков */
-                    .words-block3 { 
-                        width: 100%; 
-                        height: 120px; 
-                        border: 2px solid rgb(140, 17, 17); 
-                        margin-bottom: 20px; 
-                        background: #ffe5e5;
-                        padding: 10px;
-                        display: flex;
-                        flex-wrap: wrap;
-                        gap: 5px;
-                        align-items: flex-start;
-                        box-sizing: border-box;
-                        overflow-y: auto;
-                        font-family: 'Montserrat', Arial, sans-serif;
-                        border-radius: var(--radius);
-                    }
-
-                    .words-layout {
-                        display: flex;
-                        gap: 20px;
+                    .iframe-container iframe {
                         width: 100%;
-                        flex-grow: 1;
-                        min-height: 400px;
-                        font-family: 'Montserrat', Arial, sans-serif;
-                    }
-
-                    .words-block2 {
-                        width: 30%;
-                        border: 2px solid #000;
-                        background: #ffffff;
-                        padding: 10px;
-                        overflow-y: auto;
-                        box-sizing: border-box;
-                        display: flex;
-                        flex-wrap: wrap;
-                        align-content: flex-start;
-                        gap: 5px;
-                        font-family: 'Montserrat', Arial, sans-serif;
-                        border-radius: var(--radius);
-                    }
-
-                    .words-rightSide {
-                        width: 70%;
-                        display: flex;
-                        flex-direction: column;
-                        box-sizing: border-box;
-                        font-family: 'Montserrat', Arial, sans-serif;
-                        gap: 10px;
-                    }
-
-                    .words-upperInput {
-                        display: flex;
-                        gap: 10px;
-                        width: 100%;
-                        box-sizing: border-box;
-                        font-family: 'Montserrat', Arial, sans-serif;
-                    }
-
-                    .words-inputText {
-                        flex-grow: 1;
-                        height: 34px;
-                        padding: 4px 8px;
-                        font-size: 14px;
-                        box-sizing: border-box;
-                        font-family: 'Montserrat', Arial, sans-serif;
-                        border: 1px solid var(--color-beige);
-                        border-radius: var(--radius);
-                    }
-
-                    .words-processBtn {
-                        height: 34px;
-                        padding: 0 12px;
-                        font-size: 14px;
-                        cursor: pointer;
-                        background-color: var(--color-green);
-                        color: white;
+                        height: 100%;
                         border: none;
-                        border-radius: var(--radius);
-                        font-family: 'Montserrat', Arial, sans-serif;
-                        font-weight: 500;
-                        transition: all 0.3s ease;
-                    }
-
-                    .words-processBtn:hover {
-                        background-color: #45a049;
-                        transform: scale(1.05);
-                    }
-
-                    .words-block1 {
-                        flex-grow: 1;
-                        border: 2px solid blue;
-                        background: #e8f0ff;
-                        padding: 10px;
-                        box-sizing: border-box;
-                        overflow-y: auto;
-                        min-height: 300px;
-                        position: relative;
-                        font-family: 'Montserrat', Arial, sans-serif;
-                        border-radius: var(--radius);
-                    }
-
-                    .words-item { 
-                        padding: 8px 16px; 
-                        background: #9fda9f; 
-                        cursor: grab; 
-                        user-select: none; 
-                        border-radius: 20px 4px 4px 20px;
-                        transition: transform 0.2s;
-                        font-size: 14px;
-                        height: fit-content;
-                        font-family: 'Montserrat', Arial, sans-serif;
-                        font-weight: 500;
-                    }
-
-                    .words-item:hover {
-                        transform: scale(1.05);
-                    }
-
-                    .words-item.dragging {
-                        opacity: 0.5;
-                    }
-
-                    .words-block3-item {
-                        cursor: default;
-                        font-family: 'Montserrat', Arial, sans-serif;
-                        font-weight: 500;
-                        padding: 6px 10px;
-                        margin: 2px;
-                        background: transparent;
-                        border: none;
-                    }
-                    
-                    /* Заглушки для пустых блоков */
-                    .words-block2.empty::before,
-                    .words-block1.empty::before,
-                    .words-block3.empty::before {
-                        content: attr(data-placeholder);
-                        color: #666;
-                        padding: 10px;
-                        font-family: 'Montserrat', Arial, sans-serif;
                         display: block;
+                    }
+                    
+                    /* Альтернатива - прямая вставка с изоляцией стилей */
+                    .isolated-app-container {
                         width: 100%;
-                        text-align: center;
+                        height: 700px;
+                        background: white;
+                        border-radius: var(--radius-xl);
+                        padding: 0;
+                        box-shadow: var(--shadow-md);
+                        border: 1px solid var(--color-beige);
+                        overflow: hidden;
                     }
                     
-                    .words-block2.empty::before {
-                        content: "Блок 2 (исходные элементы)";
+                    .isolated-app {
+                        width: 100%;
+                        height: 100%;
+                        padding: 20px;
+                        font-family: 'Montserrat', Arial, sans-serif;
+                        background: #f7f7f7;
+                        box-sizing: border-box;
+                        overflow: auto;
                     }
                     
-                    .words-block1.empty::before {
-                        content: "Блок 1 (зона перетаскивания)";
+                    /* СТИЛИ ПРИЛОЖЕНИЯ С ВЫСОКИМ ПРИОРИТЕТОМ */
+                    .isolated-app #block3 { 
+                        width: 100% !important; 
+                        height: 120px !important; 
+                        border: 2px solid rgb(140, 17, 17) !important; 
+                        margin-bottom: 20px !important; 
+                        background: #ffe5e5 !important;
+                        padding: 10px !important;
+                        display: flex !important;
+                        flex-wrap: wrap !important;
+                        gap: 5px !important;
+                        align-items: flex-start !important;
+                        box-sizing: border-box !important;
+                        overflow-y: auto !important;
+                        border-radius: 8px !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
                     }
-                    
-                    .words-block3.empty::before {
-                        content: "Блок 3 (нажмите на слова в синем блоке)";
+
+                    .isolated-app #layout {
+                        display: flex !important;
+                        gap: 20px !important;
+                        width: 100% !important;
+                        height: calc(100% - 140px) !important;
+                        min-height: 400px !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                    }
+
+                    .isolated-app #block2 {
+                        width: 30% !important;
+                        border: 2px solid #000 !important;
+                        background: #ffffff !important;
+                        padding: 10px !important;
+                        overflow-y: auto !important;
+                        box-sizing: border-box !important;
+                        display: flex !important;
+                        flex-wrap: wrap !important;
+                        align-content: flex-start !important;
+                        gap: 5px !important;
+                        border-radius: 8px !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                    }
+
+                    .isolated-app #rightSide {
+                        width: 70% !important;
+                        display: flex !important;
+                        flex-direction: column !important;
+                        box-sizing: border-box !important;
+                        gap: 10px !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                    }
+
+                    .isolated-app #upperInput {
+                        display: flex !important;
+                        gap: 10px !important;
+                        width: 100% !important;
+                        box-sizing: border-box !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                    }
+
+                    .isolated-app #inputText {
+                        flex-grow: 1 !important;
+                        height: 30px !important;
+                        padding: 4px 8px !important;
+                        font-size: 14px !important;
+                        box-sizing: border-box !important;
+                        border: 1px solid #ccc !important;
+                        border-radius: 4px !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                    }
+
+                    .isolated-app #processBtn {
+                        height: 34px !important;
+                        padding: 0 12px !important;
+                        font-size: 14px !important;
+                        cursor: pointer !important;
+                        background-color: #306e32 !important;
+                        color: white !important;
+                        border: none !important;
+                        border-radius: 4px !important;
+                        font-weight: 500 !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                    }
+
+                    .isolated-app #processBtn:hover {
+                        background-color: #45a049 !important;
+                    }
+
+                    .isolated-app #block1 {
+                        flex-grow: 1 !important;
+                        border: 2px solid blue !important;
+                        background: #e8f0ff !important;
+                        padding: 10px !important;
+                        box-sizing: border-box !important;
+                        overflow-y: auto !important;
+                        min-height: 300px !important;
+                        position: relative !important;
+                        border-radius: 8px !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                    }
+
+                    .isolated-app .item { 
+                        padding: 8px 16px !important; 
+                        background: #9fda9f !important; 
+                        cursor: grab !important; 
+                        user-select: none !important; 
+                        border-radius: 20px 4px 4px 20px !important;
+                        transition: transform 0.2s !important;
+                        font-size: 14px !important;
+                        height: fit-content !important;
+                        font-weight: 500 !important;
+                        margin: 2px !important;
+                        border: none !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                        display: block !important;
+                    }
+
+                    .isolated-app .item:hover {
+                        transform: scale(1.05) !important;
+                    }
+
+                    .isolated-app .item.dragging {
+                        opacity: 0.5 !important;
+                    }
+
+                    .isolated-app .block3-item {
+                        cursor: default !important;
+                        font-weight: 500 !important;
+                        padding: 6px 10px !important;
+                        margin: 2px !important;
+                        background: transparent !important;
+                        border: none !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                        display: block !important;
                     }
                 </style>
                 
                 <div class="words-container">
                     <h3>Drag & Drop приложение "Слова"</h3>
-                    <div class="words-app" id="wordsApp">
-                        <!-- Приложение будет сгенерировано JavaScript -->
+                    
+                    <!-- ВАРИАНТ 1: Изолированный контейнер -->
+                    <div class="isolated-app-container">
+                        <div class="isolated-app" id="isolatedApp">
+                            <!-- Приложение будет вставлено сюда -->
+                        </div>
                     </div>
                     
                     <div style="margin-top: 1rem; color: var(--color-text-light);">
@@ -263,321 +281,424 @@
     </section>
 </div>
 
-<script>
-// Создаем и инициализируем приложение сразу
-(function() {
-    'use strict';
-    
-    console.log('Инициализация приложения "Слова"');
-    
-    // Создаем HTML структуру приложения
-    function createAppStructure() {
-        return `
-            <div class="words-block3 empty" data-placeholder="Блок 3 (нажмите на слова в синем блоке)"></div>
+<!-- Создаем HTML для приложения в отдельном теге template -->
+<template id="appTemplate">
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Drag & Drop Слова</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+        <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
             
-            <div class="words-layout">
-                <div class="words-block2 empty" data-placeholder="Блок 2 (исходные элементы)"></div>
+            body {
+                font-family: 'Montserrat', Arial, sans-serif;
+                margin: 20px;
+                padding: 0;
+                background: #f7f7f7;
+                height: 100vh;
+                overflow: hidden;
+            }
+            
+            #block3 { 
+                width: 100%; 
+                height: 120px; 
+                border: 2px solid rgb(140, 17, 17); 
+                margin-bottom: 20px; 
+                background: #ffe5e5;
+                padding: 10px;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+                align-items: flex-start;
+                box-sizing: border-box;
+                overflow-y: auto;
+                border-radius: 8px;
+            }
+
+            #layout {
+                display: flex;
+                gap: 20px;
+                width: 100%;
+                height: calc(100vh - 180px);
+                min-height: 400px;
+            }
+
+            #block2 {
+                width: 30%;
+                border: 2px solid #000;
+                background: #ffffff;
+                padding: 10px;
+                overflow-y: auto;
+                box-sizing: border-box;
+                display: flex;
+                flex-wrap: wrap;
+                align-content: flex-start;
+                gap: 5px;
+                border-radius: 8px;
+            }
+
+            #rightSide {
+                width: 70%;
+                display: flex;
+                flex-direction: column;
+                box-sizing: border-box;
+            }
+
+            #upperInput {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 10px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            #inputText {
+                flex-grow: 1;
+                height: 30px;
+                padding: 4px 8px;
+                font-size: 14px;
+                box-sizing: border-box;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            #processBtn {
+                height: 34px;
+                padding: 0 12px;
+                font-size: 14px;
+                cursor: pointer;
+                background-color: #306e32;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                font-family: 'Montserrat', Arial, sans-serif;
+                font-weight: 500;
+            }
+
+            #processBtn:hover {
+                background-color: #45a049;
+            }
+
+            #block1 {
+                flex-grow: 1;
+                border: 2px solid blue;
+                background: #e8f0ff;
+                padding: 10px;
+                box-sizing: border-box;
+                overflow-y: auto;
+                min-height: 300px;
+                position: relative;
+                border-radius: 8px;
+            }
+
+            .item { 
+                padding: 8px 16px; 
+                background: #9fda9f; 
+                cursor: grab; 
+                user-select: none; 
+                border-radius: 20px 4px 4px 20px;
+                transition: transform 0.2s;
+                font-size: 14px;
+                height: fit-content;
+                font-family: 'Montserrat', Arial, sans-serif;
+                font-weight: 500;
+                margin: 2px;
+            }
+
+            .item:hover {
+                transform: scale(1.05);
+            }
+
+            .item.dragging {
+                opacity: 0.5;
+            }
+
+            .block3-item {
+                cursor: default;
+                font-family: 'Montserrat', Arial, sans-serif;
+                font-weight: 500;
+                padding: 6px 10px;
+                margin: 2px;
+            }
+            
+            .empty-placeholder {
+                color: #666;
+                padding: 20px;
+                text-align: center;
+                font-style: italic;
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="block3">
+            <div class="empty-placeholder">Блок 3 (нажмите на слова в синем блоке)</div>
+        </div>
+        
+        <div id="layout">
+            <div id="block2">
+                <div class="empty-placeholder">Блок 2 (исходные элементы)</div>
+            </div>
+            
+            <div id="rightSide">
+                <div id="upperInput">
+                    <input type="text" id="inputText" placeholder="лес-бочка-бык-крик-3-Бок" value="лес-бочка-бык-крик-3-Бок">
+                    <button id="processBtn" onclick="process()">Разобрать</button>
+                </div>
                 
-                <div class="words-rightSide">
-                    <div class="words-upperInput">
-                        <input type="text" class="words-inputText" id="wordsInput" placeholder="лес-бочка-бык-крик-3-Бок" value="лес-бочка-бык-крик-3-Бок">
-                        <button class="words-processBtn" id="wordsProcess">Разобрать</button>
-                    </div>
-                    
-                    <div class="words-block1 empty" data-placeholder="Блок 1 (зона перетаскивания)"></div>
+                <div id="block1">
+                    <div class="empty-placeholder">Блок 1 (зона перетаскивания)</div>
                 </div>
             </div>
-        `;
-    }
-    
-    // Вставляем структуру приложения
-    const wordsApp = document.getElementById('wordsApp');
-    if (!wordsApp) {
-        console.error('Не найден элемент wordsApp');
-        return;
-    }
-    
-    wordsApp.innerHTML = createAppStructure();
-    console.log('Структура приложения создана');
-    
-    // Переменные приложения
-    let originalOrder = [];
-    let originalData = {};
-    let selectedWords = new Set();
-    let itemCounter = 0;
-    
-    // Функции приложения
-    function randomColor() {
-        return `hsl(${Math.random()*360},70%,70%)`;
-    }
-    
-    function processWords() {
-        console.log('Обработка слов...');
-        const input = document.getElementById('wordsInput').value.trim();
-        if (!input) {
-            console.log('Ввод пустой');
-            return;
-        }
+        </div>
         
-        let parts = input.split('-');
-        console.log('Части:', parts);
-        
-        // Сортируем слова по категориям
-        let lettersLower = parts.filter(w => /^[а-яa-z]/.test(w) && w[0] === w[0].toLowerCase()).sort();
-        let lettersUpper = parts.filter(w => /^[А-ЯA-Z]/.test(w) && w[0] === w[0].toUpperCase()).sort();
-        let numbers = parts.filter(w => /^\d+$/.test(w)).sort((a,b) => parseInt(a) - parseInt(b));
-        
-        // Создаем итоговый массив с ключами
-        let final = [];
-        lettersLower.forEach((w,i) => final.push({key:`a${i+1}`, value:w}));
-        lettersUpper.forEach((w,i) => final.push({key:`b${i+1}`, value:w}));
-        numbers.forEach((w,i) => final.push({key:`n${i+1}`, value:w}));
-        
-        originalOrder = final.map(f => f.value);
-        
-        // Очищаем и заполняем блок 2
-        let block2 = document.querySelector('.words-block2');
-        block2.innerHTML = '';
-        block2.classList.remove('empty');
-        itemCounter = 0;
-        originalData = {};
-        
-        final.forEach(obj => {
-            itemCounter++;
-            let el = document.createElement('div');
-            el.className = 'words-item';
-            el.textContent = `${obj.key} ${obj.value}`;
-            el.dataset.word = obj.value;
-            el.dataset.key = obj.key;
-            el.dataset.id = `item-${itemCounter}`;
+        <script>
+            let originalOrder = [];
+            let originalData = {};
+            let selectedWords = new Set();
+            let itemCounter = 0;
             
-            let baseColor = "#9fda9f";
-            el.style.background = baseColor;
+            function randomColor() {
+                return `hsl(${Math.random()*360},70%,70%)`;
+            }
             
-            // Сохраняем оригинальные данные
-            originalData[`${obj.value}-${itemCounter}`] = {
-                value: obj.value,
-                key: obj.key,
-                color: baseColor
+            function process() {
+                const input = document.getElementById('inputText').value.trim();
+                if (!input) return;
+                
+                let parts = input.split('-');
+                
+                let lettersLower = parts.filter(w => /^([а-яa-z]).*/i.test(w) && w[0] === w[0].toLowerCase()).sort();
+                let lettersUpper = parts.filter(w => /^([А-ЯA-Z]).*/i.test(w) && w[0] === w[0].toUpperCase()).sort();
+                let numbers = parts.filter(w => /^\\d+$/.test(w)).sort((a,b)=>a-b);
+                
+                let final = [];
+                lettersLower.forEach((w,i)=>final.push({key:`a${i+1}`, value:w}));
+                lettersUpper.forEach((w,i)=>final.push({key:`b${i+1}`, value:w}));
+                numbers.forEach((w,i)=>final.push({key:`n${i+1}`, value:w}));
+                
+                originalOrder = final.map(f=>f.value);
+                
+                let block2 = document.getElementById('block2');
+                block2.innerHTML = '';
+                itemCounter = 0;
+                
+                final.forEach(obj => {
+                    itemCounter++;
+                    let el = document.createElement('div');
+                    el.className = 'item';
+                    el.innerText = `${obj.key} ${obj.value}`;
+                    el.dataset.word = obj.value;
+                    el.dataset.key = obj.key;
+                    el.dataset.id = `item-${itemCounter}`;
+                    
+                    let baseColor = "#9fda9f";
+                    el.style.background = baseColor;
+                    
+                    originalData[`${obj.value}-${itemCounter}`] = {
+                        value: obj.value,
+                        key: obj.key,
+                        color: baseColor
+                    };
+                    
+                    el.draggable = true;
+                    
+                    el.addEventListener('dragstart', dragStart);
+                    el.addEventListener('click', function() {
+                        if (this.parentElement.id === 'block1') {
+                            addToBlock3(obj.value, this.dataset.id);
+                        }
+                    });
+                    
+                    block2.appendChild(el);
+                });
+                
+                document.getElementById('block1').innerHTML = '<div class="empty-placeholder">Блок 1 (зона перетаскивания)</div>';
+                selectedWords.clear();
+                updateBlock3();
+            }
+            
+            function addToBlock3(word, itemId) {
+                selectedWords.add(`${word}:${itemId}`);
+                updateBlock3();
+            }
+            
+            function removeFromBlock3(wordEntry) {
+                selectedWords.delete(wordEntry);
+                updateBlock3();
+            }
+            
+            function updateBlock3() {
+                let b3 = document.getElementById('block3');
+                b3.innerHTML = '';
+                
+                selectedWords.forEach(wordEntry => {
+                    const [word, itemId] = wordEntry.split(':');
+                    
+                    let el = document.createElement('div');
+                    el.className = 'block3-item';
+                    el.innerText = word;
+                    el.dataset.itemId = itemId;
+                    
+                    b3.appendChild(el);
+                });
+                
+                if (selectedWords.size === 0) {
+                    b3.innerHTML = '<div class="empty-placeholder">Блок 3 (кликните на слова в синем блоке)</div>';
+                }
+            }
+            
+            function dragStart(e) {
+                const fullText = e.target.innerText;
+                const word = fullText.split(' ')[1];
+                
+                e.dataTransfer.setData('text', word);
+                e.dataTransfer.setData('source', e.target.parentElement.id);
+                e.dataTransfer.setData('itemId', e.target.dataset.id);
+                e.dataTransfer.setData('fullText', fullText);
+            }
+            
+            document.addEventListener('dragover', function(e) {
+                e.preventDefault();
+            });
+            
+            document.addEventListener('dragend', function() {
+                document.querySelectorAll('.item.dragging').forEach(el => {
+                    el.classList.remove('dragging');
+                });
+            });
+            
+            document.addEventListener('drop', function(e) {
+                e.preventDefault();
+                
+                let word = e.dataTransfer.getData('text');
+                let source = e.dataTransfer.getData('source');
+                let itemId = e.dataTransfer.getData('itemId');
+                let fullText = e.dataTransfer.getData('fullText');
+                
+                let item = document.querySelector(`.item[data-id="${itemId}"]`);
+                if (!item) return;
+                
+                item.classList.remove('dragging');
+                
+                const block1 = document.getElementById('block1');
+                const block2 = document.getElementById('block2');
+                
+                const mouseX = e.clientX;
+                const mouseY = e.clientY;
+                
+                const block1Rect = block1.getBoundingClientRect();
+                const block2Rect = block2.getBoundingClientRect();
+                
+                const isOverBlock1 = mouseX >= block1Rect.left && mouseX <= block1Rect.right &&
+                                  mouseY >= block1Rect.top && mouseY <= block2Rect.bottom;
+                
+                const isOverBlock2 = mouseX >= block2Rect.left && mouseX <= block2Rect.right &&
+                                  mouseY >= block2Rect.top && mouseY <= block2Rect.bottom;
+                
+                if (isOverBlock1) {
+                    if (source === 'block2') {
+                        item.style.background = randomColor();
+                    }
+                    
+                    item.style.position = 'absolute';
+                    item.style.left = `${mouseX - block1Rect.left - 40}px`;
+                    item.style.top = `${mouseY - block1Rect.top - 15}px`;
+                    
+                    block1.innerHTML = '';
+                    block1.appendChild(item);
+                    
+                } else if (isOverBlock2) {
+                    const wordKey = `${word}-${itemId}`;
+                    if (originalData[wordKey]) {
+                        item.style.background = originalData[wordKey].color || "#9fda9f";
+                    } else {
+                        item.style.background = "#9fda9f";
+                    }
+                    
+                    item.style.position = '';
+                    item.style.left = '';
+                    item.style.top = '';
+                    
+                    let toRemove = null;
+                    selectedWords.forEach(entry => {
+                        if (entry.includes(`:${itemId}`)) {
+                            toRemove = entry;
+                        }
+                    });
+                    if (toRemove) {
+                        removeFromBlock3(toRemove);
+                    }
+                    
+                    let index = -1;
+                    for (let i = 0; i < originalOrder.length; i++) {
+                        if (originalOrder[i] === word) {
+                            index = i;
+                            break;
+                        }
+                    }
+                    
+                    if (index !== -1) {
+                        let block2Items = [...block2.querySelectorAll('.item')];
+                        
+                        let sortedItems = block2Items.sort((a, b) => {
+                            let aKey = a.dataset.key;
+                            let bKey = b.dataset.key;
+                            
+                            if (aKey[0] !== bKey[0]) {
+                                return aKey[0].localeCompare(bKey[0]);
+                            }
+                            return parseInt(aKey.slice(1)) - parseInt(bKey.slice(1));
+                        });
+                        
+                        block2.innerHTML = '';
+                        
+                        let allItems = [...sortedItems];
+                        if (!sortedItems.find(el => el.dataset.id === itemId)) {
+                            allItems.push(item);
+                        }
+                        
+                        allItems.sort((a, b) => {
+                            let aKey = a.dataset.key;
+                            let bKey = b.dataset.key;
+                            
+                            if (aKey[0] !== bKey[0]) {
+                                return aKey[0].localeCompare(bKey[0]);
+                            }
+                            return parseInt(aKey.slice(1)) - parseInt(bKey.slice(1));
+                        });
+                        
+                        allItems.forEach(el => {
+                            block2.appendChild(el);
+                        });
+                        
+                    } else {
+                        block2.appendChild(item);
+                    }
+                }
+            });
+            
+            document.addEventListener('dragstart', function(e) {
+                if (e.target.classList.contains('item')) {
+                    e.target.classList.add('dragging');
+                }
+            });
+            
+            // Автозапуск
+            window.onload = function() {
+                process();
             };
-            
-            el.draggable = true;
-            
-            // Добавляем обработчики
-            el.addEventListener('dragstart', handleDragStart);
-            el.addEventListener('click', function() {
-                if (this.parentElement.classList.contains('words-block1')) {
-                    addToBlock3(obj.value, this.dataset.id);
-                }
-            });
-            
-            block2.appendChild(el);
-        });
-        
-        // Очищаем блок 1
-        let block1 = document.querySelector('.words-block1');
-        block1.innerHTML = '';
-        block1.classList.add('empty');
-        
-        // Очищаем выбранные слова
-        selectedWords.clear();
-        updateBlock3();
-        
-        console.log('Обработка завершена, создано элементов:', itemCounter);
-    }
-    
-    function addToBlock3(word, itemId) {
-        console.log('Добавление в блок 3:', word, itemId);
-        selectedWords.add(`${word}:${itemId}`);
-        updateBlock3();
-    }
-    
-    function removeFromBlock3(wordEntry) {
-        console.log('Удаление из блока 3:', wordEntry);
-        selectedWords.delete(wordEntry);
-        updateBlock3();
-    }
-    
-    function updateBlock3() {
-        let b3 = document.querySelector('.words-block3');
-        if (!b3) return;
-        
-        b3.innerHTML = '';
-        
-        if (selectedWords.size > 0) {
-            b3.classList.remove('empty');
-            selectedWords.forEach(wordEntry => {
-                const [word, itemId] = wordEntry.split(':');
-                
-                let el = document.createElement('div');
-                el.className = 'words-block3-item';
-                el.textContent = word;
-                el.dataset.itemId = itemId;
-                
-                b3.appendChild(el);
-            });
-        } else {
-            b3.classList.add('empty');
-        }
-    }
-    
-    function handleDragStart(e) {
-        console.log('Начало перетаскивания');
-        const fullText = e.target.textContent;
-        const word = fullText.split(' ')[1] || fullText;
-        
-        e.dataTransfer.setData('text', word);
-        e.dataTransfer.setData('source', e.target.parentElement.className);
-        e.dataTransfer.setData('itemId', e.target.dataset.id);
-        e.dataTransfer.setData('fullText', fullText);
-        
-        e.target.classList.add('dragging');
-    }
-    
-    function handleDrop(e) {
-        e.preventDefault();
-        console.log('Drop событие');
-        
-        let word = e.dataTransfer.getData('text');
-        let source = e.dataTransfer.getData('source');
-        let itemId = e.dataTransfer.getData('itemId');
-        
-        console.log('Данные:', {word, source, itemId});
-        
-        let item = document.querySelector(`.words-item[data-id="${itemId}"]`);
-        if (!item) {
-            console.error('Элемент не найден:', itemId);
-            return;
-        }
-        
-        item.classList.remove('dragging');
-        
-        const block1 = document.querySelector('.words-block1');
-        const block2 = document.querySelector('.words-block2');
-        
-        if (!block1 || !block2) {
-            console.error('Блоки не найдены');
-            return;
-        }
-        
-        const mouseX = e.clientX;
-        const mouseY = e.clientY;
-        
-        const block1Rect = block1.getBoundingClientRect();
-        const block2Rect = block2.getBoundingClientRect();
-        
-        const isOverBlock1 = mouseX >= block1Rect.left && mouseX <= block1Rect.right &&
-                            mouseY >= block1Rect.top && mouseY <= block1Rect.bottom;
-        
-        const isOverBlock2 = mouseX >= block2Rect.left && mouseX <= block2Rect.right &&
-                            mouseY >= block2Rect.top && mouseY <= block2Rect.bottom;
-        
-        if (isOverBlock1) {
-            console.log('Перемещение в Block1');
-            if (source.includes('words-block2')) {
-                item.style.background = randomColor();
-            }
-            
-            item.style.position = 'absolute';
-            item.style.left = `${mouseX - block1Rect.left - 40}px`;
-            item.style.top = `${mouseY - block1Rect.top - 15}px`;
-            
-            block1.appendChild(item);
-            block1.classList.remove('empty');
-            
-        } else if (isOverBlock2) {
-            console.log('Возвращение в Block2');
-            const wordKey = `${word}-${itemId}`;
-            if (originalData[wordKey]) {
-                item.style.background = originalData[wordKey].color || "#9fda9f";
-            } else {
-                item.style.background = "#9fda9f";
-            }
-            
-            item.style.position = '';
-            item.style.left = '';
-            item.style.top = '';
-            
-            // Удаляем из блока 3 если есть
-            let toRemove = null;
-            selectedWords.forEach(entry => {
-                if (entry.includes(`:${itemId}`)) {
-                    toRemove = entry;
-                }
-            });
-            if (toRemove) {
-                removeFromBlock3(toRemove);
-            }
-            
-            // Восстанавливаем сортировку
-            let block2Items = [...block2.querySelectorAll('.words-item')];
-            
-            // Сортируем по ключам
-            block2Items.sort((a, b) => {
-                let aKey = a.dataset.key;
-                let bKey = b.dataset.key;
-                
-                if (aKey[0] !== bKey[0]) {
-                    return aKey[0].localeCompare(bKey[0]);
-                }
-                return parseInt(aKey.slice(1)) - parseInt(bKey.slice(1));
-            });
-            
-            block2.innerHTML = '';
-            
-            // Добавляем текущий элемент если его нет в списке
-            if (!block2Items.find(el => el.dataset.id === itemId)) {
-                block2Items.push(item);
-            }
-            
-            // Снова сортируем
-            block2Items.sort((a, b) => {
-                let aKey = a.dataset.key;
-                let bKey = b.dataset.key;
-                
-                if (aKey[0] !== bKey[0]) {
-                    return aKey[0].localeCompare(bKey[0]);
-                }
-                return parseInt(aKey.slice(1)) - parseInt(bKey.slice(1));
-            });
-            
-            block2Items.forEach(el => {
-                block2.appendChild(el);
-            });
-            
-            // Проверяем, не пустой ли блок 1
-            if (block1.querySelectorAll('.words-item').length === 0) {
-                block1.classList.add('empty');
-            }
-        }
-    }
-    
-    // Назначаем обработчики событий
-    document.getElementById('wordsProcess').addEventListener('click', processWords);
-    
-    // Обработка Enter в поле ввода
-    document.getElementById('wordsInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            processWords();
-        }
-    });
-    
-    // Глобальные обработчики drag & drop
-    document.addEventListener('dragover', function(e) {
-        e.preventDefault();
-    });
-    
-    document.addEventListener('dragend', function() {
-        document.querySelectorAll('.words-item.dragging').forEach(el => {
-            el.classList.remove('dragging');
-        });
-    });
-    
-    document.addEventListener('drop', handleDrop);
-    
-    // Запускаем обработку тестовых данных
-    console.log('Запуск обработки тестовых данных...');
-    setTimeout(processWords, 100);
-    
-})();
-</script>
+        </script>
+    </body>
+    </html>
+</template>
+
+<script>
