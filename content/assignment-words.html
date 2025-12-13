@@ -191,7 +191,9 @@
                 </div>
                 
                 <script>
-                    // Создаем объект для хранения данных
+                    // Простой работающий скрипт
+                    console.log('Скрипт задания загружен');
+                    
                     let wordsApp = {
                         originalOrder: [],
                         originalData: {},
@@ -203,19 +205,23 @@
                         return `hsl(${Math.random()*360},70%,70%)`;
                     }
 
-                    // Основная функция обработки - делаем глобальной
-                    window.processWords = function() {
-                        console.log('processWords вызвана!');
+                    // Основная функция
+                    function processWords() {
+                        console.log('Кнопка "Разобрать" нажата!');
                         
                         const input = document.getElementById('inputText');
-                        if (!input) {
-                            console.error('Поле ввода не найдено');
+                        const block2 = document.getElementById('block2');
+                        const block1 = document.getElementById('block1');
+                        const block3 = document.getElementById('block3');
+                        
+                        if (!input || !block2 || !block1 || !block3) {
+                            console.error('Не все элементы найдены');
                             return;
                         }
                         
                         const value = input.value.trim();
                         if (!value) {
-                            console.log('Поле ввода пустое');
+                            alert('Введите слова через дефис (например: лес-бочка-бык-крик-3-Бок)');
                             return;
                         }
                         
@@ -224,7 +230,7 @@
                         // Разбиваем на части
                         let parts = value.split('-');
 
-                        // Сортируем по категориям
+                        // Сортируем
                         let lettersLower = parts.filter(w => /^([а-яa-z]).*/i.test(w) && w[0] === w[0].toLowerCase()).sort();
                         let lettersUpper = parts.filter(w => /^([А-ЯA-Z]).*/i.test(w) && w[0] === w[0].toUpperCase()).sort();
                         let numbers = parts.filter(w => /^\d+$/.test(w)).sort((a,b)=>a-b);
@@ -235,23 +241,21 @@
                         lettersUpper.forEach((w,i)=>final.push({key:`b${i+1}`, value:w}));
                         numbers.forEach((w,i)=>final.push({key:`n${i+1}`, value:w}));
 
-                        // Сохраняем оригинальный порядок
+                        // Сохраняем порядок
                         wordsApp.originalOrder = final.map(f=>f.value);
 
-                        // Очищаем и заполняем блок 2
-                        let block2 = document.getElementById('block2');
-                        if (!block2) {
-                            console.error('Блок 2 не найден');
-                            return;
-                        }
-                        
+                        // Очищаем блоки
                         block2.innerHTML = '';
+                        block1.innerHTML = '';
+                        block3.innerHTML = '<div style="color: #666; padding: 10px; font-family: Montserrat, Arial, sans-serif;">Блок 3 (кликните на слова в синем блоке)</div>';
+                        
+                        wordsApp.selectedWords.clear();
                         wordsApp.itemCounter = 0;
 
+                        // Создаем элементы
                         final.forEach(obj => {
                             wordsApp.itemCounter++;
                             
-                            // Создаем элемент
                             let el = document.createElement('div');
                             el.className = 'item';
                             el.innerText = `${obj.key} ${obj.value}`;
@@ -259,21 +263,18 @@
                             el.dataset.key = obj.key;
                             el.dataset.id = `item-${wordsApp.itemCounter}`;
 
-                            // Устанавливаем цвет
                             let baseColor = "#9fda9f";
                             el.style.background = baseColor;
 
-                            // Сохраняем данные
                             wordsApp.originalData[`${obj.value}-${wordsApp.itemCounter}`] = {
                                 value: obj.value,
                                 key: obj.key,
                                 color: baseColor
                             };
                             
-                            // Делаем перетаскиваемым
                             el.draggable = true;
 
-                            // Добавляем обработчики
+                            // Drag start
                             el.addEventListener('dragstart', function(e) {
                                 e.dataTransfer.setData('text', obj.value);
                                 e.dataTransfer.setData('source', 'block2');
@@ -281,31 +282,19 @@
                                 this.classList.add('dragging');
                             });
 
+                            // Клик
                             el.addEventListener('click', function() {
-                                // Клик работает только в блоке 1
                                 if (this.parentElement && this.parentElement.id === 'block1') {
                                     wordsApp.selectedWords.add(obj.value);
                                     updateBlock3();
                                 }
                             });
 
-                            // Добавляем в блок 2
                             block2.appendChild(el);
                         });
 
-                        // Очищаем блок 1 и блок 3
-                        let block1 = document.getElementById('block1');
-                        if (block1) block1.innerHTML = '';
-                        
-                        let block3 = document.getElementById('block3');
-                        if (block3) {
-                            block3.innerHTML = '<div style="color: #666; padding: 10px; font-family: Montserrat, Arial, sans-serif;">Блок 3 (кликните на слова в синем блоке)</div>';
-                        }
-                        
-                        wordsApp.selectedWords.clear();
-                        
-                        console.log('Готово! Создано элементов:', final.length);
-                    };
+                        console.log('Создано элементов:', final.length);
+                    }
 
                     // Обновление блока 3
                     function updateBlock3() {
@@ -320,26 +309,6 @@
                             el.innerText = word;
                             b3.appendChild(el);
                         });
-                    }
-
-                    // Инициализация после загрузки страницы
-                    function initWordsAssignment() {
-                        console.log('Инициализация задания со словами...');
-                        
-                        // Находим кнопку
-                        const processBtn = document.getElementById('processBtn');
-                        if (processBtn) {
-                            console.log('Кнопка найдена, добавляем обработчик');
-                            // Удаляем старый onclick если есть
-                            processBtn.removeAttribute('onclick');
-                            // Добавляем новый обработчик
-                            processBtn.addEventListener('click', processWords);
-                        } else {
-                            console.error('Кнопка "Разобрать" не найдена!');
-                        }
-                        
-                        // Назначаем обработчики для перетаскивания
-                        setupDragAndDrop();
                     }
 
                     // Настройка Drag & Drop
@@ -384,7 +353,6 @@
                                                 mouseY >= block2Rect.top && mouseY <= block2Rect.bottom;
                             
                             if (isOverBlock1) {
-                                // Перемещаем в блок 1
                                 if (source === 'block2') {
                                     item.style.background = randomColor();
                                 }
@@ -396,7 +364,6 @@
                                 block1.appendChild(item);
                                 
                             } else if (isOverBlock2) {
-                                // Возвращаем в блок 2
                                 const wordKey = `${word}-${itemId}`;
                                 if (wordsApp.originalData[wordKey]) {
                                     item.style.background = wordsApp.originalData[wordKey].color || "#9fda9f";
@@ -408,11 +375,9 @@
                                 item.style.left = '';
                                 item.style.top = '';
                                 
-                                // Удаляем из выбранных слов
                                 wordsApp.selectedWords.delete(word);
                                 updateBlock3();
                                 
-                                // Возвращаем в правильное место в блоке 2
                                 let index = -1;
                                 for (let i = 0; i < wordsApp.originalOrder.length; i++) {
                                     if (wordsApp.originalOrder[i] === word) {
@@ -424,7 +389,6 @@
                                 if (index !== -1) {
                                     let block2Items = [...block2.querySelectorAll('.item')];
                                     
-                                    // Сортируем
                                     block2Items.sort((a, b) => {
                                         let aKey = a.dataset.key;
                                         let bKey = b.dataset.key;
@@ -437,14 +401,12 @@
                                     
                                     block2.innerHTML = '';
                                     
-                                    // Добавляем все элементы
                                     block2Items.forEach(el => {
                                         if (el.dataset.id !== itemId) {
                                             block2.appendChild(el);
                                         }
                                     });
                                     
-                                    // Добавляем текущий элемент в правильное место
                                     let inserted = false;
                                     let itemsAfter = [...block2.querySelectorAll('.item')];
                                     
@@ -485,12 +447,31 @@
                         });
                     }
 
+                    // Инициализация
+                    function init() {
+                        console.log('Инициализация задания...');
+                        
+                        const processBtn = document.getElementById('processBtn');
+                        if (processBtn) {
+                            console.log('Кнопка найдена');
+                            processBtn.addEventListener('click', processWords);
+                            processBtn.onclick = processWords; // Дублируем для надежности
+                        } else {
+                            console.error('Кнопка не найдена');
+                        }
+                        
+                        setupDragAndDrop();
+                    }
+
+                    // Делаем функции глобальными
+                    window.processWords = processWords;
+                    window.initWordsAssignment = init;
+
                     // Запускаем инициализацию
-                    // Пытаемся несколько раз с разными задержками
-                    initWordsAssignment();
-                    setTimeout(initWordsAssignment, 100);
-                    setTimeout(initWordsAssignment, 500);
-                    setTimeout(initWordsAssignment, 1000);
+                    document.addEventListener('DOMContentLoaded', init);
+                    setTimeout(init, 100);
+                    setTimeout(init, 500);
+                    setTimeout(init, 1000);
                 </script>
             </div>
 
