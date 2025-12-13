@@ -191,87 +191,99 @@
                 </div>
                 
                 <script>
-                    window.wordsApp = {
-                        originalOrder: [],
-                        originalData: {},
-                        selectedWords: new Set(),
-                        itemCounter: 0
-                    };
+                     // Объявляем глобальную функцию
+                    window.processWords = function() {
+                    const input = document.getElementById('inputText').value.trim();
+                    if (!input) return;
+            
+                    let parts = input.split('-');
+            
+                    let lettersLower = parts.filter(w => /^([а-яa-z]).*/i.test(w) && w[0] === w[0].toLowerCase()).sort();
+                    let lettersUpper = parts.filter(w => /^([А-ЯA-Z]).*/i.test(w) && w[0] === w[0].toUpperCase()).sort();
+                    let numbers = parts.filter(w => /^\d+$/.test(w)).sort((a,b)=>a-b);
+            
+                    let final = [];
+                    lettersLower.forEach((w,i)=>final.push({key:`a${i+1}`, value:w}));
+                    lettersUpper.forEach((w,i)=>final.push({key:`b${i+1}`, value:w}));
+                    numbers.forEach((w,i)=>final.push({key:`n${i+1}`, value:w}));
+            
+                    // Инициализируем объект если его нет
+                    if (!window.wordsApp) {
+                        window.wordsApp = {
+                            originalOrder: [],
+                            originalData: {},
+                            selectedWords: new Set(),
+                            itemCounter: 0
+                        };
+                    }
                     
-                    function randomColor() {
-                        return `hsl(${Math.random()*360},70%,70%)`;
-                    }
-
-                    function processWords() {
-                        const input = document.getElementById('inputText').value.trim();
-                        if (!input) return;
-
-                        let parts = input.split('-');
-
-                        let lettersLower = parts.filter(w => /^([а-яa-z]).*/i.test(w) && w[0] === w[0].toLowerCase()).sort();
-                        let lettersUpper = parts.filter(w => /^([А-ЯA-Z]).*/i.test(w) && w[0] === w[0].toUpperCase()).sort();
-                        let numbers = parts.filter(w => /^\d+$/.test(w)).sort((a,b)=>a-b);
-
-                        let final = [];
-                        lettersLower.forEach((w,i)=>final.push({key:`a${i+1}`, value:w}));
-                        lettersUpper.forEach((w,i)=>final.push({key:`b${i+1}`, value:w}));
-                        numbers.forEach((w,i)=>final.push({key:`n${i+1}`, value:w}));
-
-                        window.wordsApp.originalOrder = final.map(f=>f.value);
-
-                        let block2 = document.getElementById('block2');
-                        block2.innerHTML = '';
-                        window.wordsApp.itemCounter = 0;
-
-                        final.forEach(obj => {
-                            window.wordsApp.itemCounter++;
-                            let el = document.createElement('div');
-                            el.className = 'item';
-                            el.innerText = `${obj.key} ${obj.value}`;
-                            el.dataset.word = obj.value;
-                            el.dataset.key = obj.key;
-                            el.dataset.id = `item-${window.wordsApp.itemCounter}`;
-
-                            let baseColor = "#9fda9f";
-                            el.style.background = baseColor;
-
-                            window.wordsApp.originalData[`${obj.value}-${window.wordsApp.itemCounter}`] = {
-                                value: obj.value,
-                                key: obj.key,
-                                color: baseColor
-                            };
-                            
-                            el.draggable = true;
-
-                            el.addEventListener('dragstart', dragStart);
-                            el.addEventListener('click', function() {
-                                if (this.parentElement.id === 'block1') {
-                                    addToBlock3(obj.value, this.dataset.id);
-                                }
-                            });
-
-                            block2.appendChild(el);
-                        });
+                    window.wordsApp.originalOrder = final.map(f=>f.value);
+            
+                    let block2 = document.getElementById('block2');
+                    block2.innerHTML = '';
+                    window.wordsApp.itemCounter = 0;
+            
+                    final.forEach(obj => {
+                        window.wordsApp.itemCounter++;
+                        let el = document.createElement('div');
+                        el.className = 'item';
+                        el.innerText = `${obj.key} ${obj.value}`;
+                        el.dataset.word = obj.value;
+                        el.dataset.key = obj.key;
+                        el.dataset.id = `item-${window.wordsApp.itemCounter}`;
+            
+                        let baseColor = "#9fda9f";
+                        el.style.background = baseColor;
+            
+                        window.wordsApp.originalData[`${obj.value}-${window.wordsApp.itemCounter}`] = {
+                            value: obj.value,
+                            key: obj.key,
+                            color: baseColor
+                        };
                         
-                        document.getElementById('block1').innerHTML = '';
-                        window.wordsApp.selectedWords.clear();
-                        updateBlock3();
-                    }
-
-                    function addToBlock3(word, itemId) {
-                        window.wordsApp.selectedWords.add(`${word}:${itemId}`);
-                        updateBlock3();
-                    }
-
-                    function removeFromBlock3(wordEntry) {
+                        el.draggable = true;
+            
+                        el.addEventListener('dragstart', dragStart);
+                        el.addEventListener('click', function() {
+                            if (this.parentElement.id === 'block1') {
+                                addToBlock3(obj.value, this.dataset.id);
+                            }
+                        });
+            
+                        block2.appendChild(el);
+                    });
+                    
+                    document.getElementById('block1').innerHTML = '';
+                    window.wordsApp.selectedWords.clear();
+                    updateBlock3();
+                };
+            
+                function randomColor() {
+                    return `hsl(${Math.random()*360},70%,70%)`;
+                }
+            
+                function addToBlock3(word, itemId) {
+                    if (!window.wordsApp) window.wordsApp = {selectedWords: new Set()};
+                    if (!window.wordsApp.selectedWords) window.wordsApp.selectedWords = new Set();
+                    
+                    window.wordsApp.selectedWords.add(`${word}:${itemId}`);
+                    updateBlock3();
+                }
+            
+                function removeFromBlock3(wordEntry) {
+                    if (window.wordsApp && window.wordsApp.selectedWords) {
                         window.wordsApp.selectedWords.delete(wordEntry);
                         updateBlock3();
                     }
-
-                    function updateBlock3() {
-                        let b3 = document.getElementById('block3');
-                        b3.innerHTML = '';
-                        
+                }
+            
+                function updateBlock3() {
+                    let b3 = document.getElementById('block3');
+                    if (!b3) return;
+                    
+                    b3.innerHTML = '';
+                    
+                    if (window.wordsApp && window.wordsApp.selectedWords) {
                         window.wordsApp.selectedWords.forEach(wordEntry => {
                             const [word, itemId] = wordEntry.split(':');
                             
@@ -292,79 +304,82 @@
                             b3.innerHTML = '<div style="color: #666; padding: 10px; font-family: Montserrat, Arial, sans-serif;">Блок 3 (кликните на слова в синем блоке)</div>';
                         }
                     }
-
-                    function dragStart(e) {
-                        const fullText = e.target.innerText;
-                        const word = fullText.split(' ')[1];
-                        
-                        e.dataTransfer.setData('text', word);
-                        e.dataTransfer.setData('source', e.target.parentElement.id);
-                        e.dataTransfer.setData('itemId', e.target.dataset.id);
-                        e.dataTransfer.setData('fullText', fullText);
-                    }
-
-                    document.addEventListener('dragover', function(e) {
-                        e.preventDefault();
+                }
+            
+                function dragStart(e) {
+                    const fullText = e.target.innerText;
+                    const word = fullText.split(' ')[1];
+                    
+                    e.dataTransfer.setData('text', word);
+                    e.dataTransfer.setData('source', e.target.parentElement.id);
+                    e.dataTransfer.setData('itemId', e.target.dataset.id);
+                    e.dataTransfer.setData('fullText', fullText);
+                }
+            
+                // Инициализация обработчиков событий
+                document.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                });
+            
+                document.addEventListener('dragend', function() {
+                    document.querySelectorAll('.item.dragging').forEach(el => {
+                        el.classList.remove('dragging');
                     });
-
-                    document.addEventListener('dragend', function() {
-                        document.querySelectorAll('.item.dragging').forEach(el => {
-                            el.classList.remove('dragging');
-                        });
-                    });
-
-                    document.addEventListener('drop', function(e) {
-                        e.preventDefault();
+                });
+            
+                document.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    
+                    let word = e.dataTransfer.getData('text');
+                    let source = e.dataTransfer.getData('source');
+                    let itemId = e.dataTransfer.getData('itemId');
+                    let fullText = e.dataTransfer.getData('fullText');
+                    
+                    let item = document.querySelector(`.item[data-id="${itemId}"]`);
+                    if (!item) return;
+            
+                    item.classList.remove('dragging');
+                    
+                    const block1 = document.getElementById('block1');
+                    const block2 = document.getElementById('block2');
+                    
+                    const mouseX = e.clientX;
+                    const mouseY = e.clientY;
+                    
+                    const block1Rect = block1.getBoundingClientRect();
+                    const block2Rect = block2.getBoundingClientRect();
+                    
+                    const isOverBlock1 = mouseX >= block1Rect.left && mouseX <= block1Rect.right &&
+                                        mouseY >= block1Rect.top && mouseY <= block1Rect.bottom;
+                    
+                    const isOverBlock2 = mouseX >= block2Rect.left && mouseX <= block2Rect.right &&
+                                        mouseY >= block2Rect.top && mouseY <= block2Rect.bottom;
+                    
+                    if (isOverBlock1) {
+                        if (source === 'block2') {
+                            item.style.background = randomColor();
+                        }
                         
-                        let word = e.dataTransfer.getData('text');
-                        let source = e.dataTransfer.getData('source');
-                        let itemId = e.dataTransfer.getData('itemId');
-                        let fullText = e.dataTransfer.getData('fullText');
+                        item.style.position = 'absolute';
+                        item.style.left = `${mouseX - block1Rect.left - 40}px`;
+                        item.style.top = `${mouseY - block1Rect.top - 15}px`;
                         
-                        let item = document.querySelector(`.item[data-id="${itemId}"]`);
-                        if (!item) return;
-
-                        item.classList.remove('dragging');
+                        block1.appendChild(item);
                         
-                        const block1 = document.getElementById('block1');
-                        const block2 = document.getElementById('block2');
+                    } else if (isOverBlock2) {
+                        const wordKey = `${word}-${itemId}`;
+                        if (window.wordsApp && window.wordsApp.originalData && window.wordsApp.originalData[wordKey]) {
+                            item.style.background = window.wordsApp.originalData[wordKey].color || "#9fda9f";
+                        } else {
+                            item.style.background = "#9fda9f";
+                        }
                         
-                        const mouseX = e.clientX;
-                        const mouseY = e.clientY;
+                        item.style.position = '';
+                        item.style.left = '';
+                        item.style.top = '';
                         
-                        const block1Rect = block1.getBoundingClientRect();
-                        const block2Rect = block2.getBoundingClientRect();
-                        
-                        const isOverBlock1 = mouseX >= block1Rect.left && mouseX <= block1Rect.right &&
-                                            mouseY >= block1Rect.top && mouseY <= block1Rect.bottom;
-                        
-                        const isOverBlock2 = mouseX >= block2Rect.left && mouseX <= block2Rect.right &&
-                                            mouseY >= block2Rect.top && mouseY <= block2Rect.bottom;
-                        
-                        if (isOverBlock1) {
-                            if (source === 'block2') {
-                                item.style.background = randomColor();
-                            }
-                            
-                            item.style.position = 'absolute';
-                            item.style.left = `${mouseX - block1Rect.left - 40}px`;
-                            item.style.top = `${mouseY - block1Rect.top - 15}px`;
-                            
-                            block1.appendChild(item);
-                            
-                        } else if (isOverBlock2) {
-                            const wordKey = `${word}-${itemId}`;
-                            if (window.wordsApp.originalData[wordKey]) {
-                                item.style.background = window.wordsApp.originalData[wordKey].color || "#9fda9f";
-                            } else {
-                                item.style.background = "#9fda9f";
-                            }
-                            
-                            item.style.position = '';
-                            item.style.left = '';
-                            item.style.top = '';
-                            
-                            let toRemove = null;
+                        let toRemove = null;
+                        if (window.wordsApp && window.wordsApp.selectedWords) {
                             window.wordsApp.selectedWords.forEach(entry => {
                                 if (entry.includes(`:${itemId}`)) {
                                     toRemove = entry;
@@ -373,8 +388,10 @@
                             if (toRemove) {
                                 removeFromBlock3(toRemove);
                             }
-                            
-                            let index = -1;
+                        }
+                        
+                        let index = -1;
+                        if (window.wordsApp && window.wordsApp.originalOrder) {
                             for (let i = 0; i < window.wordsApp.originalOrder.length; i++) {
                                 if (window.wordsApp.originalOrder[i] === word) {
                                     index = i;
@@ -420,13 +437,31 @@
                                 block2.appendChild(item);
                             }
                         }
-                    });
-
-                    document.addEventListener('dragstart', function(e) {
-                        if (e.target.classList.contains('item')) {
-                            e.target.classList.add('dragging');
-                        }
-                    });
+                    }
+                });
+            
+                document.addEventListener('dragstart', function(e) {
+                    if (e.target.classList.contains('item')) {
+                        e.target.classList.add('dragging');
+                    }
+                });
+                
+                // Принудительная инициализация при загрузке страницы
+                window.initWordsAssignment = function() {
+                    // Назначаем обработчик кнопке напрямую
+                    const processBtn = document.getElementById('processBtn');
+                    if (processBtn) {
+                        processBtn.onclick = window.processWords;
+                    }
+                };
+                
+                // Вызываем инициализацию сразу и через небольшую задержку
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', window.initWordsAssignment);
+                } else {
+                    window.initWordsAssignment();
+                }
+                setTimeout(window.initWordsAssignment, 500);
                 </script>
             </div>
 
