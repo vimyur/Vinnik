@@ -191,204 +191,228 @@
                 </div>
                 
                 <script>
-                     // Делаем функцию глобальной
-                    window.processWords = function() {
-                        console.log('Функция processWords вызвана!');
+                     // Создаем объект для хранения данных
+                    let wordsApp = {
+                        originalOrder: [],
+                        originalData: {},
+                        selectedWords: new Set(),
+                        itemCounter: 0
+                    };
+                
+                    function randomColor() {
+                        return `hsl(${Math.random()*360},70%,70%)`;
+                    }
+                
+                    // Основная функция обработки
+                    function processWords() {
+                        console.log('processWords вызвана!');
                         
-                        const input = document.getElementById('inputText').value.trim();
+                        const input = document.getElementById('inputText');
                         if (!input) {
+                            console.error('Поле ввода не найдено');
+                            return;
+                        }
+                        
+                        const value = input.value.trim();
+                        if (!value) {
                             console.log('Поле ввода пустое');
                             return;
                         }
                         
-                        console.log('Введенный текст:', input);
+                        console.log('Обрабатываем:', value);
                 
-                        let parts = input.split('-');
+                        // Разбиваем на части
+                        let parts = value.split('-');
                 
+                        // Сортируем по категориям
                         let lettersLower = parts.filter(w => /^([а-яa-z]).*/i.test(w) && w[0] === w[0].toLowerCase()).sort();
                         let lettersUpper = parts.filter(w => /^([А-ЯA-Z]).*/i.test(w) && w[0] === w[0].toUpperCase()).sort();
                         let numbers = parts.filter(w => /^\d+$/.test(w)).sort((a,b)=>a-b);
                 
+                        // Создаем финальный массив
                         let final = [];
                         lettersLower.forEach((w,i)=>final.push({key:`a${i+1}`, value:w}));
                         lettersUpper.forEach((w,i)=>final.push({key:`b${i+1}`, value:w}));
                         numbers.forEach((w,i)=>final.push({key:`n${i+1}`, value:w}));
                 
-                        if (!window.wordsApp) {
-                            window.wordsApp = {
-                                originalOrder: [],
-                                originalData: {},
-                                selectedWords: new Set(),
-                                itemCounter: 0
-                            };
-                        }
-                        
-                        window.wordsApp.originalOrder = final.map(f=>f.value);
+                        // Сохраняем оригинальный порядок
+                        wordsApp.originalOrder = final.map(f=>f.value);
                 
+                        // Очищаем и заполняем блок 2
                         let block2 = document.getElementById('block2');
                         if (!block2) {
-                            console.error('Блок 2 не найден!');
+                            console.error('Блок 2 не найден');
                             return;
                         }
                         
                         block2.innerHTML = '';
-                        window.wordsApp.itemCounter = 0;
+                        wordsApp.itemCounter = 0;
                 
                         final.forEach(obj => {
-                            window.wordsApp.itemCounter++;
+                            wordsApp.itemCounter++;
+                            
+                            // Создаем элемент
                             let el = document.createElement('div');
                             el.className = 'item';
                             el.innerText = `${obj.key} ${obj.value}`;
                             el.dataset.word = obj.value;
                             el.dataset.key = obj.key;
-                            el.dataset.id = `item-${window.wordsApp.itemCounter}`;
+                            el.dataset.id = `item-${wordsApp.itemCounter}`;
                 
+                            // Устанавливаем цвет
                             let baseColor = "#9fda9f";
                             el.style.background = baseColor;
                 
-                            window.wordsApp.originalData[`${obj.value}-${window.wordsApp.itemCounter}`] = {
+                            // Сохраняем данные
+                            wordsApp.originalData[`${obj.value}-${wordsApp.itemCounter}`] = {
                                 value: obj.value,
                                 key: obj.key,
                                 color: baseColor
                             };
                             
+                            // Делаем перетаскиваемым
                             el.draggable = true;
                 
+                            // Добавляем обработчики
                             el.addEventListener('dragstart', function(e) {
-                                const fullText = e.target.innerText;
-                                const word = fullText.split(' ')[1];
-                                e.dataTransfer.setData('text', word);
-                                e.dataTransfer.setData('source', e.target.parentElement.id);
-                                e.dataTransfer.setData('itemId', e.target.dataset.id);
-                                e.dataTransfer.setData('fullText', fullText);
-                                e.target.classList.add('dragging');
+                                e.dataTransfer.setData('text', obj.value);
+                                e.dataTransfer.setData('source', 'block2');
+                                e.dataTransfer.setData('itemId', el.dataset.id);
+                                this.classList.add('dragging');
                             });
                 
                             el.addEventListener('click', function() {
-                                if (this.parentElement.id === 'block1') {
-                                    if (!window.wordsApp.selectedWords) window.wordsApp.selectedWords = new Set();
-                                    window.wordsApp.selectedWords.add(`${obj.value}:${this.dataset.id}`);
-                                    
-                                    let b3 = document.getElementById('block3');
-                                    if (b3) {
-                                        b3.innerHTML = '';
-                                        window.wordsApp.selectedWords.forEach(wordEntry => {
-                                            const [word, itemId] = wordEntry.split(':');
-                                            let el = document.createElement('div');
-                                            el.className = 'block3-item';
-                                            el.innerText = word;
-                                            b3.appendChild(el);
-                                        });
-                                    }
+                                // Клик работает только в блоке 1
+                                if (this.parentElement && this.parentElement.id === 'block1') {
+                                    wordsApp.selectedWords.add(obj.value);
+                                    updateBlock3();
                                 }
                             });
                 
+                            // Добавляем в блок 2
                             block2.appendChild(el);
                         });
-                        
+                
+                        // Очищаем блок 1 и блок 3
                         let block1 = document.getElementById('block1');
                         if (block1) block1.innerHTML = '';
-                        
-                        if (window.wordsApp.selectedWords) window.wordsApp.selectedWords.clear();
                         
                         let block3 = document.getElementById('block3');
                         if (block3) {
                             block3.innerHTML = '<div style="color: #666; padding: 10px; font-family: Montserrat, Arial, sans-serif;">Блок 3 (кликните на слова в синем блоке)</div>';
                         }
                         
-                        console.log('Обработано элементов:', final.length);
-                    };
+                        wordsApp.selectedWords.clear();
+                        
+                        console.log('Готово! Создано элементов:', final.length);
+                    }
                 
-                    // Обработчики для Drag & Drop
-                    document.addEventListener('dragover', function(e) {
-                        e.preventDefault();
-                    });
-                
-                    document.addEventListener('dragend', function() {
-                        document.querySelectorAll('.item.dragging').forEach(el => {
-                            el.classList.remove('dragging');
+                    // Обновление блока 3
+                    function updateBlock3() {
+                        let b3 = document.getElementById('block3');
+                        if (!b3) return;
+                        
+                        b3.innerHTML = '';
+                        
+                        wordsApp.selectedWords.forEach(word => {
+                            let el = document.createElement('div');
+                            el.className = 'block3-item';
+                            el.innerText = word;
+                            b3.appendChild(el);
                         });
-                    });
+                    }
                 
-                    document.addEventListener('drop', function(e) {
-                        e.preventDefault();
+                    // Инициализация после загрузки страницы
+                    function initWordsAssignment() {
+                        console.log('Инициализация задания со словами...');
                         
-                        let word = e.dataTransfer.getData('text');
-                        let source = e.dataTransfer.getData('source');
-                        let itemId = e.dataTransfer.getData('itemId');
-                        let fullText = e.dataTransfer.getData('fullText');
+                        // Находим кнопку
+                        const processBtn = document.getElementById('processBtn');
+                        if (processBtn) {
+                            console.log('Кнопка найдена, добавляем обработчик');
+                            processBtn.addEventListener('click', processWords);
+                        } else {
+                            console.error('Кнопка "Разобрать" не найдена!');
+                        }
                         
-                        let item = document.querySelector(`.item[data-id="${itemId}"]`);
-                        if (!item) return;
+                        // Назначаем обработчики для перетаскивания
+                        setupDragAndDrop();
+                    }
                 
-                        item.classList.remove('dragging');
-                        
-                        const block1 = document.getElementById('block1');
-                        const block2 = document.getElementById('block2');
-                        
-                        const mouseX = e.clientX;
-                        const mouseY = e.clientY;
-                        
-                        const block1Rect = block1.getBoundingClientRect();
-                        const block2Rect = block2.getBoundingClientRect();
-                        
-                        const isOverBlock1 = mouseX >= block1Rect.left && mouseX <= block1Rect.right &&
-                                            mouseY >= block1Rect.top && mouseY <= block1Rect.bottom;
-                        
-                        const isOverBlock2 = mouseX >= block2Rect.left && mouseX <= block2Rect.right &&
-                                            mouseY >= block2Rect.top && mouseY <= block2Rect.bottom;
-                        
-                        if (isOverBlock1) {
-                            if (source === 'block2') {
-                                item.style.background = `hsl(${Math.random()*360},70%,70%)`;
-                            }
+                    // Настройка Drag & Drop
+                    function setupDragAndDrop() {
+                        document.addEventListener('dragover', function(e) {
+                            e.preventDefault();
+                        });
+                
+                        document.addEventListener('dragend', function() {
+                            document.querySelectorAll('.item.dragging').forEach(el => {
+                                el.classList.remove('dragging');
+                            });
+                        });
+                
+                        document.addEventListener('drop', function(e) {
+                            e.preventDefault();
                             
-                            item.style.position = 'absolute';
-                            item.style.left = `${mouseX - block1Rect.left - 40}px`;
-                            item.style.top = `${mouseY - block1Rect.top - 15}px`;
+                            let word = e.dataTransfer.getData('text');
+                            let source = e.dataTransfer.getData('source');
+                            let itemId = e.dataTransfer.getData('itemId');
                             
-                            block1.appendChild(item);
+                            let item = document.querySelector(`.item[data-id="${itemId}"]`);
+                            if (!item) return;
+                
+                            item.classList.remove('dragging');
                             
-                        } else if (isOverBlock2) {
-                            const wordKey = `${word}-${itemId}`;
-                            if (window.wordsApp && window.wordsApp.originalData && window.wordsApp.originalData[wordKey]) {
-                                item.style.background = window.wordsApp.originalData[wordKey].color || "#9fda9f";
-                            } else {
-                                item.style.background = "#9fda9f";
-                            }
+                            const block1 = document.getElementById('block1');
+                            const block2 = document.getElementById('block2');
                             
-                            item.style.position = '';
-                            item.style.left = '';
-                            item.style.top = '';
+                            if (!block1 || !block2) return;
+                
+                            const mouseX = e.clientX;
+                            const mouseY = e.clientY;
                             
-                            let toRemove = null;
-                            if (window.wordsApp && window.wordsApp.selectedWords) {
-                                window.wordsApp.selectedWords.forEach(entry => {
-                                    if (entry.includes(`:${itemId}`)) {
-                                        toRemove = entry;
-                                    }
-                                });
-                                if (toRemove) {
-                                    window.wordsApp.selectedWords.delete(toRemove);
-                                    // Обновляем блок 3
-                                    let b3 = document.getElementById('block3');
-                                    if (b3) {
-                                        b3.innerHTML = '';
-                                        window.wordsApp.selectedWords.forEach(wordEntry => {
-                                            const [w, id] = wordEntry.split(':');
-                                            let el = document.createElement('div');
-                                            el.className = 'block3-item';
-                                            el.innerText = w;
-                                            b3.appendChild(el);
-                                        });
-                                    }
+                            const block1Rect = block1.getBoundingClientRect();
+                            const block2Rect = block2.getBoundingClientRect();
+                            
+                            const isOverBlock1 = mouseX >= block1Rect.left && mouseX <= block1Rect.right &&
+                                                mouseY >= block1Rect.top && mouseY <= block1Rect.bottom;
+                            
+                            const isOverBlock2 = mouseX >= block2Rect.left && mouseX <= block2Rect.right &&
+                                                mouseY >= block2Rect.top && mouseY <= block2Rect.bottom;
+                            
+                            if (isOverBlock1) {
+                                // Перемещаем в блок 1
+                                if (source === 'block2') {
+                                    item.style.background = randomColor();
                                 }
-                            }
-                            
-                            let index = -1;
-                            if (window.wordsApp && window.wordsApp.originalOrder) {
-                                for (let i = 0; i < window.wordsApp.originalOrder.length; i++) {
-                                    if (window.wordsApp.originalOrder[i] === word) {
+                                
+                                item.style.position = 'absolute';
+                                item.style.left = `${mouseX - block1Rect.left - 40}px`;
+                                item.style.top = `${mouseY - block1Rect.top - 15}px`;
+                                
+                                block1.appendChild(item);
+                                
+                            } else if (isOverBlock2) {
+                                // Возвращаем в блок 2
+                                const wordKey = `${word}-${itemId}`;
+                                if (wordsApp.originalData[wordKey]) {
+                                    item.style.background = wordsApp.originalData[wordKey].color || "#9fda9f";
+                                } else {
+                                    item.style.background = "#9fda9f";
+                                }
+                                
+                                item.style.position = '';
+                                item.style.left = '';
+                                item.style.top = '';
+                                
+                                // Удаляем из выбранных слов
+                                wordsApp.selectedWords.delete(word);
+                                updateBlock3();
+                                
+                                // Возвращаем в правильное место в блоке 2
+                                let index = -1;
+                                for (let i = 0; i < wordsApp.originalOrder.length; i++) {
+                                    if (wordsApp.originalOrder[i] === word) {
                                         index = i;
                                         break;
                                     }
@@ -397,7 +421,8 @@
                                 if (index !== -1) {
                                     let block2Items = [...block2.querySelectorAll('.item')];
                                     
-                                    let sortedItems = block2Items.sort((a, b) => {
+                                    // Сортируем
+                                    block2Items.sort((a, b) => {
                                         let aKey = a.dataset.key;
                                         let bKey = b.dataset.key;
                                         
@@ -409,48 +434,60 @@
                                     
                                     block2.innerHTML = '';
                                     
-                                    let allItems = [...sortedItems];
-                                    if (!sortedItems.find(el => el.dataset.id === itemId)) {
-                                        allItems.push(item);
+                                    // Добавляем все элементы
+                                    block2Items.forEach(el => {
+                                        if (el.dataset.id !== itemId) {
+                                            block2.appendChild(el);
+                                        }
+                                    });
+                                    
+                                    // Добавляем текущий элемент в правильное место
+                                    let inserted = false;
+                                    let itemsAfter = [...block2.querySelectorAll('.item')];
+                                    
+                                    for (let i = 0; i < itemsAfter.length; i++) {
+                                        let itemKey = itemsAfter[i].dataset.key;
+                                        let currentKey = item.dataset.key;
+                                        
+                                        if (itemKey[0] === currentKey[0]) {
+                                            let itemNum = parseInt(itemKey.slice(1));
+                                            let currentNum = parseInt(currentKey.slice(1));
+                                            
+                                            if (itemNum > currentNum) {
+                                                block2.insertBefore(item, itemsAfter[i]);
+                                                inserted = true;
+                                                break;
+                                            }
+                                        } else if (itemKey[0] > currentKey[0]) {
+                                            block2.insertBefore(item, itemsAfter[i]);
+                                            inserted = true;
+                                            break;
+                                        }
                                     }
                                     
-                                    allItems.sort((a, b) => {
-                                        let aKey = a.dataset.key;
-                                        let bKey = b.dataset.key;
-                                        
-                                        if (aKey[0] !== bKey[0]) {
-                                            return aKey[0].localeCompare(bKey[0]);
-                                        }
-                                        return parseInt(aKey.slice(1)) - parseInt(bKey.slice(1));
-                                    });
-                                    
-                                    allItems.forEach(el => {
-                                        block2.appendChild(el);
-                                    });
+                                    if (!inserted) {
+                                        block2.appendChild(item);
+                                    }
                                     
                                 } else {
                                     block2.appendChild(item);
                                 }
                             }
-                        }
-                    });
+                        });
                 
-                    document.addEventListener('dragstart', function(e) {
-                        if (e.target.classList.contains('item')) {
-                            e.target.classList.add('dragging');
-                        }
-                    });
-                    
-                    // Дополнительная инициализация для SPA
-                    setTimeout(function() {
-                        console.log('Дополнительная инициализация...');
-                        // Проверяем элементы
-                        console.log('Кнопка найдена:', document.getElementById('processBtn'));
-                        console.log('Поле ввода найдено:', document.getElementById('inputText'));
-                        console.log('Блок 1:', document.getElementById('block1'));
-                        console.log('Блок 2:', document.getElementById('block2'));
-                        console.log('Блок 3:', document.getElementById('block3'));
-                    }, 1000);
+                        document.addEventListener('dragstart', function(e) {
+                            if (e.target.classList.contains('item')) {
+                                e.target.classList.add('dragging');
+                            }
+                        });
+                    }
+                
+                    // Запускаем инициализацию
+                    // Пытаемся несколько раз с разными задержками
+                    initWordsAssignment();
+                    setTimeout(initWordsAssignment, 100);
+                    setTimeout(initWordsAssignment, 500);
+                    setTimeout(initWordsAssignment, 1000);
                 </script>
             </div>
 
