@@ -38,30 +38,26 @@
                         margin-bottom: 1.5rem;
                     }
                     
-                    /* Стили для приложения */
-                    .words-app-wrapper {
+                    /* Основные стили приложения */
+                    .words-app {
+                        font-family: 'Montserrat', Arial, sans-serif;
+                        width: 100%;
+                        min-height: 600px;
                         background: white;
                         border-radius: var(--radius-xl);
                         padding: 2rem;
                         box-shadow: var(--shadow-md);
                         border: 1px solid var(--color-beige);
-                        min-height: 600px;
+                        display: flex;
+                        flex-direction: column;
                     }
                     
-                    /* Адаптация стилей приложения */
-                    #wordsApp {
-                        font-family: 'Montserrat', Arial, sans-serif;
-                        margin: 0;
-                        padding: 0;
-                        background: #f7f7f7;
-                        height: 100%;
-                    }
-                    
-                    #wordsApp .block3 {
-                        width: 100%;
-                        height: 120px;
-                        border: 2px solid rgb(140, 17, 17);
-                        margin-bottom: 20px;
+                    /* Стили блоков */
+                    .words-block3 { 
+                        width: 100%; 
+                        height: 120px; 
+                        border: 2px solid rgb(140, 17, 17); 
+                        margin-bottom: 20px; 
                         background: #ffe5e5;
                         padding: 10px;
                         display: flex;
@@ -71,18 +67,19 @@
                         box-sizing: border-box;
                         overflow-y: auto;
                         font-family: 'Montserrat', Arial, sans-serif;
+                        border-radius: var(--radius);
                     }
-                    
-                    #wordsApp .layout {
+
+                    .words-layout {
                         display: flex;
                         gap: 20px;
                         width: 100%;
-                        height: calc(100vh - 400px);
+                        flex-grow: 1;
                         min-height: 400px;
                         font-family: 'Montserrat', Arial, sans-serif;
                     }
-                    
-                    #wordsApp .block2 {
+
+                    .words-block2 {
                         width: 30%;
                         border: 2px solid #000;
                         background: #ffffff;
@@ -94,26 +91,27 @@
                         align-content: flex-start;
                         gap: 5px;
                         font-family: 'Montserrat', Arial, sans-serif;
+                        border-radius: var(--radius);
                     }
-                    
-                    #wordsApp .rightSide {
+
+                    .words-rightSide {
                         width: 70%;
                         display: flex;
                         flex-direction: column;
                         box-sizing: border-box;
                         font-family: 'Montserrat', Arial, sans-serif;
+                        gap: 10px;
                     }
-                    
-                    #wordsApp .upperInput {
+
+                    .words-upperInput {
                         display: flex;
                         gap: 10px;
-                        margin-bottom: 10px;
                         width: 100%;
                         box-sizing: border-box;
                         font-family: 'Montserrat', Arial, sans-serif;
                     }
-                    
-                    #wordsApp .inputText {
+
+                    .words-inputText {
                         flex-grow: 1;
                         height: 34px;
                         padding: 4px 8px;
@@ -123,8 +121,8 @@
                         border: 1px solid var(--color-beige);
                         border-radius: var(--radius);
                     }
-                    
-                    #wordsApp .processBtn {
+
+                    .words-processBtn {
                         height: 34px;
                         padding: 0 12px;
                         font-size: 14px;
@@ -137,13 +135,13 @@
                         font-weight: 500;
                         transition: all 0.3s ease;
                     }
-                    
-                    #wordsApp .processBtn:hover {
+
+                    .words-processBtn:hover {
                         background-color: #45a049;
                         transform: scale(1.05);
                     }
-                    
-                    #wordsApp .block1 {
+
+                    .words-block1 {
                         flex-grow: 1;
                         border: 2px solid blue;
                         background: #e8f0ff;
@@ -153,31 +151,31 @@
                         min-height: 300px;
                         position: relative;
                         font-family: 'Montserrat', Arial, sans-serif;
+                        border-radius: var(--radius);
                     }
-                    
-                    #wordsApp .item {
-                        padding: 8px 16px;
-                        background: #9fda9f;
-                        cursor: grab;
-                        user-select: none;
+
+                    .words-item { 
+                        padding: 8px 16px; 
+                        background: #9fda9f; 
+                        cursor: grab; 
+                        user-select: none; 
                         border-radius: 20px 4px 4px 20px;
                         transition: transform 0.2s;
                         font-size: 14px;
                         height: fit-content;
                         font-family: 'Montserrat', Arial, sans-serif;
                         font-weight: 500;
-                        margin: 2px;
                     }
-                    
-                    #wordsApp .item:hover {
+
+                    .words-item:hover {
                         transform: scale(1.05);
                     }
-                    
-                    #wordsApp .item.dragging {
+
+                    .words-item.dragging {
                         opacity: 0.5;
                     }
-                    
-                    #wordsApp .block3-item {
+
+                    .words-block3-item {
                         cursor: default;
                         font-family: 'Montserrat', Arial, sans-serif;
                         font-weight: 500;
@@ -187,35 +185,36 @@
                         border: none;
                     }
                     
-                    /* Заглушка для пустых блоков */
-                    #wordsApp .block2:empty::after,
-                    #wordsApp .block1:empty::after,
-                    #wordsApp .block3:empty::after {
+                    /* Заглушки для пустых блоков */
+                    .words-block2.empty::before,
+                    .words-block1.empty::before,
+                    .words-block3.empty::before {
                         content: attr(data-placeholder);
                         color: #666;
                         padding: 10px;
                         font-family: 'Montserrat', Arial, sans-serif;
                         display: block;
+                        width: 100%;
+                        text-align: center;
                     }
                     
-                    #wordsApp .block2:empty::after {
+                    .words-block2.empty::before {
                         content: "Блок 2 (исходные элементы)";
                     }
                     
-                    #wordsApp .block1:empty::after {
+                    .words-block1.empty::before {
                         content: "Блок 1 (зона перетаскивания)";
                     }
                     
-                    #wordsApp .block3:empty::after {
+                    .words-block3.empty::before {
                         content: "Блок 3 (нажмите на слова в синем блоке)";
                     }
                 </style>
                 
                 <div class="words-container">
                     <h3>Drag & Drop приложение "Слова"</h3>
-                    <div class="words-app-wrapper">
-                        <!-- Приложение будет вставлено здесь -->
-                        <div id="wordsApp"></div>
+                    <div class="words-app" id="wordsApp">
+                        <!-- Приложение будет сгенерировано JavaScript -->
                     </div>
                     
                     <div style="margin-top: 1rem; color: var(--color-text-light);">
@@ -265,37 +264,43 @@
 </div>
 
 <script>
-// Инициализация приложения после загрузки страницы
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Инициализация приложения "Слова"...');
+// Создаем и инициализируем приложение сразу
+(function() {
+    'use strict';
     
-    // Создаем HTML структуру
+    console.log('Инициализация приложения "Слова"');
+    
+    // Создаем HTML структуру приложения
+    function createAppStructure() {
+        return `
+            <div class="words-block3 empty" data-placeholder="Блок 3 (нажмите на слова в синем блоке)"></div>
+            
+            <div class="words-layout">
+                <div class="words-block2 empty" data-placeholder="Блок 2 (исходные элементы)"></div>
+                
+                <div class="words-rightSide">
+                    <div class="words-upperInput">
+                        <input type="text" class="words-inputText" id="wordsInput" placeholder="лес-бочка-бык-крик-3-Бок" value="лес-бочка-бык-крик-3-Бок">
+                        <button class="words-processBtn" id="wordsProcess">Разобрать</button>
+                    </div>
+                    
+                    <div class="words-block1 empty" data-placeholder="Блок 1 (зона перетаскивания)"></div>
+                </div>
+            </div>
+        `;
+    }
+    
+    // Вставляем структуру приложения
     const wordsApp = document.getElementById('wordsApp');
     if (!wordsApp) {
         console.error('Не найден элемент wordsApp');
         return;
     }
     
-    wordsApp.innerHTML = `
-        <div class="block3" data-placeholder="Блок 3 (нажмите на слова в синем блоке)"></div>
-        
-        <div class="layout">
-            <div class="block2" data-placeholder="Блок 2 (исходные элементы)"></div>
-            
-            <div class="rightSide">
-                <div class="upperInput">
-                    <input type="text" class="inputText" id="wordsInput" placeholder="лес-бочка-бык-крик-3-Бок">
-                    <button class="processBtn" id="wordsProcess">Разобрать</button>
-                </div>
-                
-                <div class="block1" data-placeholder="Блок 1 (зона перетаскивания)"></div>
-            </div>
-        </div>
-    `;
-    
+    wordsApp.innerHTML = createAppStructure();
     console.log('Структура приложения создана');
     
-    // Инициализируем переменные приложения
+    // Переменные приложения
     let originalOrder = [];
     let originalData = {};
     let selectedWords = new Set();
@@ -314,36 +319,34 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        console.log('Ввод:', input);
         let parts = input.split('-');
         console.log('Части:', parts);
         
-        let lettersLower = parts.filter(w => /^([а-яa-z]).*/i.test(w) && w[0] === w[0].toLowerCase()).sort();
-        let lettersUpper = parts.filter(w => /^([А-ЯA-Z]).*/i.test(w) && w[0] === w[0].toUpperCase()).sort();
-        let numbers = parts.filter(w => /^\d+$/.test(w)).sort((a,b)=>parseInt(a)-parseInt(b));
+        // Сортируем слова по категориям
+        let lettersLower = parts.filter(w => /^[а-яa-z]/.test(w) && w[0] === w[0].toLowerCase()).sort();
+        let lettersUpper = parts.filter(w => /^[А-ЯA-Z]/.test(w) && w[0] === w[0].toUpperCase()).sort();
+        let numbers = parts.filter(w => /^\d+$/.test(w)).sort((a,b) => parseInt(a) - parseInt(b));
         
-        console.log('Строчные:', lettersLower);
-        console.log('Заглавные:', lettersUpper);
-        console.log('Числа:', numbers);
-        
+        // Создаем итоговый массив с ключами
         let final = [];
-        lettersLower.forEach((w,i)=>final.push({key:`a${i+1}`, value:w}));
-        lettersUpper.forEach((w,i)=>final.push({key:`b${i+1}`, value:w}));
-        numbers.forEach((w,i)=>final.push({key:`n${i+1}`, value:w}));
+        lettersLower.forEach((w,i) => final.push({key:`a${i+1}`, value:w}));
+        lettersUpper.forEach((w,i) => final.push({key:`b${i+1}`, value:w}));
+        numbers.forEach((w,i) => final.push({key:`n${i+1}`, value:w}));
         
-        originalOrder = final.map(f=>f.value);
-        console.log('Итоговый порядок:', originalOrder);
+        originalOrder = final.map(f => f.value);
         
-        let block2 = document.querySelector('#wordsApp .block2');
+        // Очищаем и заполняем блок 2
+        let block2 = document.querySelector('.words-block2');
         block2.innerHTML = '';
+        block2.classList.remove('empty');
         itemCounter = 0;
         originalData = {};
         
         final.forEach(obj => {
             itemCounter++;
             let el = document.createElement('div');
-            el.className = 'item';
-            el.innerText = `${obj.key} ${obj.value}`;
+            el.className = 'words-item';
+            el.textContent = `${obj.key} ${obj.value}`;
             el.dataset.word = obj.value;
             el.dataset.key = obj.key;
             el.dataset.id = `item-${itemCounter}`;
@@ -351,6 +354,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let baseColor = "#9fda9f";
             el.style.background = baseColor;
             
+            // Сохраняем оригинальные данные
             originalData[`${obj.value}-${itemCounter}`] = {
                 value: obj.value,
                 key: obj.key,
@@ -359,11 +363,10 @@ document.addEventListener('DOMContentLoaded', function() {
             
             el.draggable = true;
             
-            // Обработчики событий
+            // Добавляем обработчики
             el.addEventListener('dragstart', handleDragStart);
             el.addEventListener('click', function() {
-                console.log('Клик по элементу:', obj.value);
-                if (this.parentElement.classList.contains('block1')) {
+                if (this.parentElement.classList.contains('words-block1')) {
                     addToBlock3(obj.value, this.dataset.id);
                 }
             });
@@ -371,7 +374,12 @@ document.addEventListener('DOMContentLoaded', function() {
             block2.appendChild(el);
         });
         
-        document.querySelector('#wordsApp .block1').innerHTML = '';
+        // Очищаем блок 1
+        let block1 = document.querySelector('.words-block1');
+        block1.innerHTML = '';
+        block1.classList.add('empty');
+        
+        // Очищаем выбранные слова
         selectedWords.clear();
         updateBlock3();
         
@@ -391,36 +399,31 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function updateBlock3() {
-        console.log('Обновление блока 3, элементов:', selectedWords.size);
-        let b3 = document.querySelector('#wordsApp .block3');
-        if (!b3) {
-            console.error('Не найден блок 3');
-            return;
-        }
+        let b3 = document.querySelector('.words-block3');
+        if (!b3) return;
         
         b3.innerHTML = '';
         
-        selectedWords.forEach(wordEntry => {
-            const [word, itemId] = wordEntry.split(':');
-            
-            let el = document.createElement('div');
-            el.className = 'block3-item';
-            el.innerText = word;
-            el.dataset.itemId = itemId;
-            
-            b3.appendChild(el);
-        });
-        
-        if (selectedWords.size === 0) {
-            b3.innerHTML = '<div style="color: #666; padding: 10px; font-family: Montserrat, Arial, sans-serif;">Блок 3 (кликните на слова в синем блоке)</div>';
+        if (selectedWords.size > 0) {
+            b3.classList.remove('empty');
+            selectedWords.forEach(wordEntry => {
+                const [word, itemId] = wordEntry.split(':');
+                
+                let el = document.createElement('div');
+                el.className = 'words-block3-item';
+                el.textContent = word;
+                el.dataset.itemId = itemId;
+                
+                b3.appendChild(el);
+            });
+        } else {
+            b3.classList.add('empty');
         }
-        
-        console.log('Блок 3 обновлен');
     }
     
     function handleDragStart(e) {
         console.log('Начало перетаскивания');
-        const fullText = e.target.innerText;
+        const fullText = e.target.textContent;
         const word = fullText.split(' ')[1] || fullText;
         
         e.dataTransfer.setData('text', word);
@@ -431,29 +434,7 @@ document.addEventListener('DOMContentLoaded', function() {
         e.target.classList.add('dragging');
     }
     
-    // Глобальные обработчики событий
-    document.getElementById('wordsProcess').addEventListener('click', processWords);
-    
-    // Обработка Enter в поле ввода
-    document.getElementById('wordsInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            processWords();
-        }
-    });
-    
-    // Обработчики drag & drop
-    document.addEventListener('dragover', function(e) {
-        e.preventDefault();
-    });
-    
-    document.addEventListener('dragend', function(e) {
-        console.log('Завершение перетаскивания');
-        document.querySelectorAll('#wordsApp .item.dragging').forEach(el => {
-            el.classList.remove('dragging');
-        });
-    });
-    
-    document.addEventListener('drop', function(e) {
+    function handleDrop(e) {
         e.preventDefault();
         console.log('Drop событие');
         
@@ -463,7 +444,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log('Данные:', {word, source, itemId});
         
-        let item = document.querySelector(`#wordsApp .item[data-id="${itemId}"]`);
+        let item = document.querySelector(`.words-item[data-id="${itemId}"]`);
         if (!item) {
             console.error('Элемент не найден:', itemId);
             return;
@@ -471,8 +452,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         item.classList.remove('dragging');
         
-        const block1 = document.querySelector('#wordsApp .block1');
-        const block2 = document.querySelector('#wordsApp .block2');
+        const block1 = document.querySelector('.words-block1');
+        const block2 = document.querySelector('.words-block2');
         
         if (!block1 || !block2) {
             console.error('Блоки не найдены');
@@ -491,15 +472,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const isOverBlock2 = mouseX >= block2Rect.left && mouseX <= block2Rect.right &&
                             mouseY >= block2Rect.top && mouseY <= block2Rect.bottom;
         
-        console.log('Координаты:', {mouseX, mouseY});
-        console.log('Block1 rect:', block1Rect);
-        console.log('Block2 rect:', block2Rect);
-        console.log('Over Block1:', isOverBlock1);
-        console.log('Over Block2:', isOverBlock2);
-        
         if (isOverBlock1) {
             console.log('Перемещение в Block1');
-            if (source.includes('block2')) {
+            if (source.includes('words-block2')) {
                 item.style.background = randomColor();
             }
             
@@ -508,6 +483,7 @@ document.addEventListener('DOMContentLoaded', function() {
             item.style.top = `${mouseY - block1Rect.top - 15}px`;
             
             block1.appendChild(item);
+            block1.classList.remove('empty');
             
         } else if (isOverBlock2) {
             console.log('Возвращение в Block2');
@@ -534,9 +510,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Восстанавливаем сортировку
-            let block2Items = [...block2.querySelectorAll('.item')];
+            let block2Items = [...block2.querySelectorAll('.words-item')];
             
-            let sortedItems = block2Items.sort((a, b) => {
+            // Сортируем по ключам
+            block2Items.sort((a, b) => {
                 let aKey = a.dataset.key;
                 let bKey = b.dataset.key;
                 
@@ -548,12 +525,13 @@ document.addEventListener('DOMContentLoaded', function() {
             
             block2.innerHTML = '';
             
-            let allItems = [...sortedItems];
-            if (!sortedItems.find(el => el.dataset.id === itemId)) {
-                allItems.push(item);
+            // Добавляем текущий элемент если его нет в списке
+            if (!block2Items.find(el => el.dataset.id === itemId)) {
+                block2Items.push(item);
             }
             
-            allItems.sort((a, b) => {
+            // Снова сортируем
+            block2Items.sort((a, b) => {
                 let aKey = a.dataset.key;
                 let bKey = b.dataset.key;
                 
@@ -563,21 +541,43 @@ document.addEventListener('DOMContentLoaded', function() {
                 return parseInt(aKey.slice(1)) - parseInt(bKey.slice(1));
             });
             
-            allItems.forEach(el => {
+            block2Items.forEach(el => {
                 block2.appendChild(el);
             });
+            
+            // Проверяем, не пустой ли блок 1
+            if (block1.querySelectorAll('.words-item').length === 0) {
+                block1.classList.add('empty');
+            }
         }
-        
-        console.log('Drop завершен');
+    }
+    
+    // Назначаем обработчики событий
+    document.getElementById('wordsProcess').addEventListener('click', processWords);
+    
+    // Обработка Enter в поле ввода
+    document.getElementById('wordsInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            processWords();
+        }
     });
     
-    // Тестовые данные для демонстрации
-    console.log('Инициализация завершена');
+    // Глобальные обработчики drag & drop
+    document.addEventListener('dragover', function(e) {
+        e.preventDefault();
+    });
     
-    // Автозаполнение тестовыми данными для демонстрации
-    setTimeout(() => {
-        document.getElementById('wordsInput').value = 'лес-бочка-бык-крик-3-Бок';
-        processWords();
-    }, 100);
-});
+    document.addEventListener('dragend', function() {
+        document.querySelectorAll('.words-item.dragging').forEach(el => {
+            el.classList.remove('dragging');
+        });
+    });
+    
+    document.addEventListener('drop', handleDrop);
+    
+    // Запускаем обработку тестовых данных
+    console.log('Запуск обработки тестовых данных...');
+    setTimeout(processWords, 100);
+    
+})();
 </script>
